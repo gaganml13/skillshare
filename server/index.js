@@ -1,17 +1,19 @@
 // ==============
 // IMPORTS
 // ==============
-const jwt = require('jsonwebtoken');
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken'); // You'll need this for the login route
 require('dotenv').config();
-const User = require('./models/User');
+const User = require('./models/User'); // Correctly named with capital U
+const cors = require('cors');
 
 // ==============
 // INITIALIZATION
 // ==============
 const app = express();
+app.use(cors()); // Use CORS middleware
 app.use(express.json()); // Middleware to parse JSON bodies
 
 const PORT = process.env.PORT || 5001;
@@ -21,11 +23,9 @@ const PORT = process.env.PORT || 5001;
 // ==============
 const startServer = async () => {
   try {
-    // Connect to the Database
     await mongoose.connect(process.env.MONGO_URI);
     console.log('MongoDB Connected successfully!');
 
-    // Start the Express server
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
@@ -36,7 +36,7 @@ const startServer = async () => {
   }
 };
 
-startServer(); // Call the main function to start everything
+startServer();
 
 // ==============
 // API ROUTES
@@ -47,45 +47,55 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-// --- User Login Route (Updated with JWT) ---
+// --- User Registration Route (This was missing) ---
+app.post('/api/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+    user = new User({
+      name,
+      email,
+      password,
+    });
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    await user.save();
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// --- User Login Route ---
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
   try {
-    // 1. Check if user exists
     let user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid Credentials' });
     }
-
-    // 2. Compare the provided password with the stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid Credentials' });
     }
-
-    // === START OF NEW JWT LOGIC ===
-
-    // 3. If credentials are correct, create the "payload" for our token
     const payload = {
       user: {
-        id: user.id, // We only need the user's unique database ID in the token
+        id: user.id,
       },
     };
-
-    // 4. Sign the token with our secret key
     jwt.sign(
       payload,
-      process.env.JWT_SECRET, // Fetches the secret key from our .env file
-      { expiresIn: '5h' }, // This is optional, but makes the token expire in 5 hours
+      process.env.JWT_SECRET,
+      { expiresIn: '5h' },
       (err, token) => {
         if (err) throw err;
-        // 5. Send the token back to the client
         res.json({ token });
       }
     );
-
-    // === END OF NEW JWT LOGIC ===
-
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
