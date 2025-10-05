@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema; // This was the missing line
 
 const CourseSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'user' // This links the course to the User model
+    ref: 'user'
   },
   title: {
     type: String,
@@ -14,7 +14,23 @@ const CourseSchema = new Schema({
     type: String,
     required: true
   },
-  // We will add more fields like videos, price, etc. later
+  videos: [
+    {
+      title: {
+        type: String,
+        required: true
+      },
+      url: {
+        type: String,
+        required: true
+      },
+      videoType: {
+        type: String,
+        enum: ['upload', 'youtube'],
+        required: true
+      }
+    }
+  ],
   date: {
     type: Date,
     default: Date.now

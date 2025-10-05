@@ -15,6 +15,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    enum: ['student', 'instructor'],
+    default: 'student',
+  },
   date: {
     type: Date,
     default: Date.now, // Automatically sets the registration date
