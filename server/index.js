@@ -4,19 +4,31 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken'); // You'll need this for the login route
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const User = require('./models/User'); // Correctly named with capital U
 const cors = require('cors');
+
+// Import Models and Middleware
+const User = require('./models/User');
+const Course = require('./models/Course');
+const auth = require('./middleware/auth');
+
 
 // ==============
 // INITIALIZATION
 // ==============
 const app = express();
-app.use(cors()); // Use CORS middleware
-app.use(express.json()); // Middleware to parse JSON bodies
+
+// This is the correct CORS configuration to allow custom headers
+app.use(cors({
+  allowedHeaders: ['x-auth-token', 'Content-Type'],
+}));
+
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 const PORT = process.env.PORT || 5001;
+
 
 // ==============
 // DATABASE CONNECTION & SERVER START
@@ -38,6 +50,7 @@ const startServer = async () => {
 
 startServer();
 
+
 // ==============
 // API ROUTES
 // ==============
@@ -47,7 +60,7 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-// --- User Registration Route (This was missing) ---
+// --- User Registration Route ---
 app.post('/api/register', async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -96,6 +109,25 @@ app.post('/api/login', async (req, res) => {
         res.json({ token });
       }
     );
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// --- Create a New Course Route (Protected) ---
+app.post('/api/courses', auth, async (req, res) => {
+  const { title, description } = req.body;
+  try {
+    const newCourse = new Course({
+      title,
+      description,
+      user: req.user.id // Get user ID from auth middleware
+    });
+
+    const course = await newCourse.save();
+    res.json(course);
+
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
