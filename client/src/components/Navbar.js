@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { AuthContext } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const Nav = styled.nav`
   width: 100%;
@@ -70,18 +72,43 @@ const GetStartedBtn = styled.button`
   }
 `;
 
+
 const Navbar = () => {
+  const { user, logout, loading } = useContext(AuthContext);
+  if (loading) return null;
+
   return (
     <Nav>
-      <Logo>SkillShare</Logo>
+      <Logo>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 28, marginRight: 6 }}>🎓</span> SkillShare
+        </span>
+      </Logo>
       <NavLinks>
-        <li>Browse Courses</li>
-        <li>Become a Creator</li>
-        <li>About</li>
+        <li>
+          <Link to="/courses" style={{ color: 'inherit', textDecoration: 'none' }}>Browse Courses</Link>
+        </li>
+        <li>
+          <Link to="/create-course" style={{ color: 'inherit', textDecoration: 'none' }}>Become a Creator</Link>
+        </li>
+        <li>
+          <Link to="/about" style={{ color: 'inherit', textDecoration: 'none' }}>About</Link>
+        </li>
       </NavLinks>
       <Actions>
-        <LoginBtn>Log In</LoginBtn>
-        <GetStartedBtn>Get Started</GetStartedBtn>
+        {user ? (
+          <>
+            <span style={{ color: 'var(--primary-purple)', fontWeight: 500, marginRight: '0.5rem' }}>
+              {user.name}
+            </span>
+            <LoginBtn onClick={logout}>Logout</LoginBtn>
+          </>
+        ) : (
+          <>
+            <Link to="/login" style={{ textDecoration: 'none' }}><LoginBtn>Log In</LoginBtn></Link>
+            <Link to="/register" style={{ textDecoration: 'none' }}><GetStartedBtn>Get Started</GetStartedBtn></Link>
+          </>
+        )}
       </Actions>
     </Nav>
   );

@@ -7,14 +7,14 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isInstructor, setIsInstructor] = useState(false);
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // Handle registration form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const res = await register(name, email, password, isInstructor);
+    const res = await register(name, email, password);
     if (res.success) {
       navigate('/login');
     } else {
@@ -37,17 +37,6 @@ const RegisterPage = () => {
         <div style={{ marginBottom: 16 }}>
           <label>Password</label>
           <input type="password" value={password} onChange={e => setPassword(e.target.value)} required style={{ width: '100%', padding: 8 }} />
-        </div>
-        <div style={{ marginBottom: 16 }}>
-          <label>
-            <input
-              type="checkbox"
-              checked={isInstructor}
-              onChange={e => setIsInstructor(e.target.checked)}
-              style={{ marginRight: 8 }}
-            />
-            Register as Instructor
-          </label>
         </div>
         {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
         <div style={{ display: 'flex', gap: '10px' }}>
