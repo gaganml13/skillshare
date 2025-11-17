@@ -1,247 +1,375 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import { Navigate } from 'react-router-dom';
-import axios from 'axios';
-import CourseCard from '../components/courses/CourseCard';
+import React, { useState, useContext, useCallback, useEffect, useMemo } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { SAMPLE_COURSES, isSampleEnrolled } from '../utils/sampleCourses';
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+import HeaderHero from '../components/HeaderHero';
+import KPIGrid from '../components/KPIGrid';
+import { SAMPLE_COURSES, getLocalCreatedCourses, isSampleEnrolled } from '../utils/sampleCourses';
 
-// Styled Components for Dashboard
-const HeaderSection = styled.section`
+const iconProps = {
+  width: 20,
+  height: 20,
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.7,
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round'
+};
+
+const IconHome = () => (
+  <svg {...iconProps}>
+    <path d="M3 11l9-7 9 7" />
+    <path d="M5.5 9.5V21h5.5v-5h2v5h5.5V9.5" />
+  </svg>
+);
+
+const IconCourses = () => (
+  <svg {...iconProps}>
+    <path d="M5 5h12a2 2 0 0 1 2 2v11H7a2 2 0 0 0-2 2V5z" />
+    <path d="M5 11h14" />
+    <path d="M9 7v4" />
+  </svg>
+);
+
+const IconCommunity = () => (
+  <svg {...iconProps}>
+    <path d="M8 10a4 4 0 1 1 8 0" />
+    <path d="M4 19a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4" />
+    <path d="M3 13h2" />
+    <path d="M19 13h2" />
+  </svg>
+);
+
+const IconMentor = () => (
+  <svg {...iconProps}>
+    <circle cx="8.5" cy="8.5" r="3" />
+    <circle cx="15.5" cy="8.5" r="2.5" />
+    <path d="M2.5 19.5a5.5 5.5 0 0 1 11 0" />
+    <path d="M13 17a4 4 0 0 1 6 2.5" />
+  </svg>
+);
+
+const IconJobs = () => (
+  <svg {...iconProps}>
+    <rect x="3" y="7" width="18" height="11" rx="2" />
+    <path d="M9 7V5h6v2" />
+    <path d="M3 12h18" />
+  </svg>
+);
+
+const IconLeaderboard = () => (
+  <svg {...iconProps}>
+    <path d="M6 21v-8" />
+    <path d="M12 21V3" />
+    <path d="M18 21v-12" />
+    <path d="M8 5h8" />
+  </svg>
+);
+
+const FEATURE_ICONS = {
+  home: <IconHome />,
+  courses: <IconCourses />,
+  community: <IconCommunity />,
+  mentorship: <IconMentor />,
+  jobs: <IconJobs />,
+  leaderboard: <IconLeaderboard />
+};
+
+const NAV_LINKS = [
+  { key: 'home', label: 'Home', to: '/home', accent: 'linear-gradient(135deg,#a5b4fc,#6366f1)' },
+  { key: 'courses', label: 'Courses', to: '/courses', accent: 'linear-gradient(135deg,#c7d2fe,#7c3aed)' },
+  { key: 'community', label: 'Community', to: '/community', accent: 'linear-gradient(135deg,#fecdd3,#f472b6)' },
+  { key: 'mentorship', label: 'Mentors', to: '/mentorship', accent: 'linear-gradient(135deg,#bfdbfe,#3b82f6)' },
+  { key: 'jobs', label: 'Jobs', to: '/jobs', accent: 'linear-gradient(135deg,#fde68a,#f59e0b)' },
+  { key: 'leaderboard', label: 'Leaderboard', to: '/leaderboard', accent: 'linear-gradient(135deg,#fbcfe8,#db2777)' }
+];
+
+const QUICK_TILES = [
+  { key: 'home', label: 'Home', to: '/home', description: 'Master new drops & livestreams', accent: NAV_LINKS[0].accent },
+  { key: 'courses', label: 'Courses', to: '/courses', description: 'Browse cinematic classes', accent: NAV_LINKS[1].accent },
+  { key: 'community', label: 'Community', to: '/community', description: 'Critiques & creator clubs', accent: NAV_LINKS[2].accent },
+  { key: 'mentorship', label: 'Mentorship', to: '/mentorship', description: 'Book 1:1 expert sessions', accent: NAV_LINKS[3].accent },
+  { key: 'jobs', label: 'Jobs', to: '/jobs', description: 'Apply to curated briefs', accent: NAV_LINKS[4].accent }
+];
+
+const Shell = styled.main`
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding-bottom: 4rem;
+`;
+
+const NavBar = styled.nav`
   width: 100%;
-  min-height: 260px;
-  background: linear-gradient(120deg, #1e3c72 0%, #2a5298 50%, #6C63FF 100%);
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+`;
+
+const NavInner = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 72px;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+`;
+
+const BrandLink = styled(Link)`
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #312e81;
+  text-decoration: none;
+`;
+
+const NavCluster = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+`;
+
+const NavChip = styled(Link)`
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  padding: 0.45rem 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #0f172a;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 30px rgba(79, 70, 229, 0.2);
+  }
+`;
+
+const IconBubble = styled.span`
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  margin-bottom: 0;
+  background: ${({ accent }) => accent || 'linear-gradient(135deg,#818cf8,#6366f1)'};
 `;
 
-const HeaderContent = styled.div`
-  text-align: center;
-  max-width: 700px;
+const UserChip = styled.span`
+  border-radius: 999px;
+  background: #e0e7ff;
+  padding: 0.35rem 0.9rem;
+  font-weight: 600;
+  color: #312e81;
 `;
 
-const HeaderTitle = styled.h1`
-  font-size: 2.8rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 4px 24px rgba(44, 62, 80, 0.18);
-`;
-
-const HeaderSubtitle = styled.p`
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
-`;
-
-const HeaderDesc = styled.p`
-  font-size: 1.1rem;
-  color: rgba(255,255,255,0.92);
-  margin-bottom: 0.5rem;
-`;
-
-const MainContent = styled.div`
+const Content = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 16px;
+  padding: 3rem 1.5rem 0;
 `;
 
-const Section = styled.div`
-  margin-bottom: 48px;
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 18px;
-  color: #22223B;
-`;
-
-const EmptyText = styled.p`
-  color: #888;
-  font-size: 1.1rem;
-  margin-bottom: 12px;
-`;
-
-const CourseGrid = styled.div`
+const Layout = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
+  flex-direction: column;
+  gap: 2.5rem;
+`;
+
+const MainColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+`;
+
+const QuickGrid = styled.section`
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+`;
+
+const QuickCard = styled(Link)`
+  text-decoration: none;
+  border-radius: 1.75rem;
+  background: #fff;
+  padding: 1.25rem;
+  box-shadow: 0 25px 50px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.08);
+  color: #0f172a;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 30px 55px rgba(15, 23, 42, 0.12);
+  }
+`;
+
+const QuickLabel = styled.h3`
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+`;
+
+const QuickCopy = styled.p`
+  margin: 0;
+  color: #475569;
+  font-size: 0.9rem;
+`;
+
+const AsideColumn = styled.aside`
+  display: none;
+`;
+
+const MobileRailButton = styled.button`
+  display: none;
+`;
+
+const MobileRailPanel = styled.div`
+  display: none;
 `;
 
 const DashboardPage = () => {
   const { user, token, loading } = useContext(AuthContext);
-  const [createdCourses, setCreatedCourses] = useState([]);
+  const [remoteCreatedCourses, setRemoteCreatedCourses] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [error, setError] = useState('');
   const [featuredCourses, setFeaturedCourses] = useState(SAMPLE_COURSES);
+  const [isFetching, setIsFetching] = useState(false);
+  const [localCreatedCourses, setLocalCreatedCourses] = useState([]);
 
   useEffect(() => {
     const fetchUserCourses = async () => {
+      setIsFetching(true);
       try {
         const res = await axios.get('/api/courses/user/dashboard', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setCreatedCourses(res.data.createdCourses);
-        setEnrolledCourses(res.data.enrolledCourses);
+        setRemoteCreatedCourses(res.data.createdCourses || []);
+        setEnrolledCourses(res.data.enrolledCourses || []);
+        setError('');
       } catch (err) {
         setError('Failed to load your courses');
+      } finally {
+        setIsFetching(false);
       }
     };
     if (user && token) fetchUserCourses();
-    const onEnroll = () => {
-      if (user && token) fetchUserCourses();
-    };
-    window.addEventListener('courseEnrolled', onEnroll);
-    return () => window.removeEventListener('courseEnrolled', onEnroll);
   }, [user, token]);
 
-  // Fetch featured/public courses to show recommendations when user has none enrolled
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
         const res = await axios.get('/api/courses');
         const fetched = Array.isArray(res.data) ? res.data : [];
-        if (fetched.length === 0) {
-          setFeaturedCourses(SAMPLE_COURSES);
-        } else {
-          setFeaturedCourses(fetched);
-        }
+        setFeaturedCourses(fetched.length > 0 ? fetched : SAMPLE_COURSES);
       } catch (err) {
-  // ignore - keep SAMPLE_COURSES as fallback
+        setFeaturedCourses(SAMPLE_COURSES);
       }
     };
     fetchFeatured();
   }, []);
 
+  const refreshLocalCreatedCourses = useCallback(() => {
+    if (!user) return;
+    const ownerId = user._id || user.id;
+    if (!ownerId) return;
+    setLocalCreatedCourses(getLocalCreatedCourses(ownerId));
+  }, [user]);
+
+  useEffect(() => {
+    refreshLocalCreatedCourses();
+  }, [refreshLocalCreatedCourses]);
+
+  useEffect(() => {
+    const handleCourseCreated = () => refreshLocalCreatedCourses();
+    window.addEventListener('courseCreated', handleCourseCreated);
+    return () => window.removeEventListener('courseCreated', handleCourseCreated);
+  }, [refreshLocalCreatedCourses]);
+
+  const createdList = useMemo(() => {
+    const merged = [...localCreatedCourses, ...remoteCreatedCourses];
+    return merged.map((course) => ({
+      ...course,
+      instructor: course.instructor || { name: course.ownerName || user?.name || 'You' },
+      enrolled: true,
+      localOnly: Boolean(course.localOnly)
+    }));
+  }, [localCreatedCourses, remoteCreatedCourses, user?.name]);
+
   if (loading) return null;
   if (!user) return <Navigate to="/login" replace />;
 
-  const currentUserId = user?._id || user?.id;
-  const isUserAuthorized = (authorizedUsers = []) => {
-    if (!currentUserId || !Array.isArray(authorizedUsers)) return false;
-    return authorizedUsers.some(authUser => {
-      if (!authUser) return false;
-      if (typeof authUser === 'string') return authUser === currentUserId;
-      if (typeof authUser === 'object') return (authUser._id || authUser.id) === currentUserId;
-      return false;
-    });
-  };
-
+  const kpiCards = [
+    {
+      label: 'Active classrooms',
+      value: createdList.length || 1,
+      meta: 'Creators you manage'
+    },
+    {
+      label: 'Inbox',
+      value: '3 replies',
+      meta: 'Community threads to review'
+    },
+    {
+      label: 'Focus minutes logged',
+      value: 145,
+      meta: 'Past 7 days',
+      trend: '+18% vs last week'
+    }
+  ];
   return (
-    <>
-      <HeaderSection>
-        <HeaderContent>
-          <HeaderTitle>Hello, {user.name}!</HeaderTitle>
-          <HeaderSubtitle>Welcome to your dashboard.</HeaderSubtitle>
-          <HeaderDesc>
-            Track your learning, manage your created courses, and enroll in new skills. <br />
-            <span style={{ fontWeight: 600, color: '#fff' }}>Unlock your potential with SkillShare!</span>
-          </HeaderDesc>
-        </HeaderContent>
-      </HeaderSection>
-      <MainContent>
-        {error && <div style={{ color: 'red', textAlign: 'center', marginBottom: 16 }}>{error}</div>}
-        {/* Featured Courses Section (large cards) */}
-        <Section>
-          <SectionTitle style={{ textAlign: 'center' }}>Featured Courses</SectionTitle>
-          <p style={{ textAlign: 'center', color: '#666', marginBottom: 20 }}>Explore our hand-picked selection of top-rated courses from expert creators</p>
-          <CourseGrid>
-            {(featuredCourses.length ? featuredCourses : SAMPLE_COURSES).slice(0,4).map((course, idx) => (
-              <CourseCard
-                key={course._id || idx}
-                id={course._id}
-                title={course.title}
-                instructorName={course.instructor?.name || 'Instructor'}
-                price={course.price}
-                category={course.category}
-                imageUrl={course.imageUrl}
-                duration={course.duration}
-                learners={course.learners}
-                rating={course.rating}
-                showEnrollButton={true}
-                access={course.access}
-                enrolled={Boolean(course._id && isSampleEnrolled(course._id))}
-              />
+    <Shell>
+      <NavBar>
+        <NavInner>
+          <BrandLink to="/dashboard">SkillverseX</BrandLink>
+          <NavCluster>
+            {NAV_LINKS.map((item) => (
+              <NavChip key={item.key} to={item.to} aria-label={`Go to ${item.label}`}>
+                <IconBubble accent={item.accent}>{FEATURE_ICONS[item.key]}</IconBubble>
+                <span>{item.label}</span>
+              </NavChip>
             ))}
-          </CourseGrid>
-        </Section>
-        <Section>
-          <SectionTitle>My Created Courses</SectionTitle>
-          {createdCourses.length === 0 ? (
-            <EmptyText>You haven't created any courses yet.</EmptyText>
-          ) : (
-            <CourseGrid>
-              {createdCourses.map((course, idx) => (
-                <CourseCard
-                  key={course._id}
-                  id={course._id}
-                  title={course.title}
-                  instructorName={course.instructor?.name || 'Unknown'}
-                  price={course.price}
-                  category={course.category}
-                  imageUrl={course.imageUrl}
-                  duration={course.duration || (idx % 2 === 0 ? '12 hours' : '8 hours')}
-                  learners={course.learners || (idx % 2 === 0 ? 1250 : 890)}
-                  rating={course.rating || (idx % 2 === 0 ? 4.8 : 4.9)}
-                  showEnrollButton={true}
-                    access={course.access}
-                />
-              ))}
-            </CourseGrid>
-          )}
-        </Section>
-        <Section>
-          <SectionTitle>Courses I'm Enrolled In</SectionTitle>
-          {enrolledCourses.length === 0 ? (
-            <>
-              <EmptyText>You are not enrolled in any courses yet.</EmptyText>
-              <p style={{ marginTop: 12, color: '#666' }}>Recommended for you</p>
-              <CourseGrid>
-                {featuredCourses.slice(0,4).map((course, idx) => (
-                  <CourseCard
-                    key={course._id || idx}
-                    id={course._id}
-                    title={course.title || 'Sample Course'}
-                    instructorName={course.instructor?.name || 'Instructor'}
-                    price={course.price}
-                    category={course.category}
-                    imageUrl={course.imageUrl}
-                    duration={course.duration || (idx % 2 === 0 ? '12 hours' : '8 hours')}
-                    learners={course.learners || (idx % 2 === 0 ? 1250 : 890)}
-                    rating={course.rating || (idx % 2 === 0 ? 4.8 : 4.9)}
-                    showEnrollButton={true}
-                    access={course.access}
-                    enrolled={isUserAuthorized(course.authorizedUsers) || (course._id && isSampleEnrolled(course._id))}
-                  />
-                ))}
-              </CourseGrid>
-            </>
-          ) : (
-            <CourseGrid>
-              {enrolledCourses.map((course, idx) => (
-                <CourseCard
-                  key={course._id}
-                  id={course._id}
-                  title={course.title}
-                  instructorName={course.instructor?.name || 'Unknown'}
-                  price={course.price}
-                  category={course.category}
-                  imageUrl={course.imageUrl}
-                  duration={course.duration || (idx % 2 === 0 ? '12 hours' : '8 hours')}
-                  learners={course.learners || (idx % 2 === 0 ? 1250 : 890)}
-                  rating={course.rating || (idx % 2 === 0 ? 4.8 : 4.9)}
-                  showEnrollButton={true}
-                />
-              ))}
-            </CourseGrid>
-          )}
-        </Section>
-      </MainContent>
-    </>
-  );
+          </NavCluster>
+          <UserChip>{user.name}</UserChip>
+        </NavInner>
+      </NavBar>
 
+      <Content>
+        <Layout>
+          <MainColumn>
+            <section className="rounded-3xl bg-white/90 p-4 shadow-xl ring-1 ring-slate-100 backdrop-blur sm:p-6">
+              <HeaderHero
+                eyebrow="Dashboard"
+                title={`Welcome back, ${user.name}`}
+                description="Your personalized SkillverseX hub — keep streaks alive, manage cohorts, and explore fresh drops."
+                chips={[{ label: 'Weekly focus • Deep Work' }, { label: 'Streak goal • 30 days' }]}
+                actions={[
+                  { label: 'Create a course', to: '/create-course' },
+                  { label: 'Browse catalog', to: '/courses', variant: 'ghost' }
+                ]}
+                rightSlot={<KPIGrid items={kpiCards} />}
+              />
+            </section>
+
+
+          </MainColumn>
+        </Layout>
+      </Content>
+    </Shell>
+  );
 };
 
 export default DashboardPage;

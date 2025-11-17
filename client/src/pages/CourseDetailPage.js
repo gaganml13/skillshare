@@ -15,6 +15,33 @@ import {
   isSampleEnrolled,
   storeSampleEnrollment
 } from '../utils/sampleCourses';
+import styled from 'styled-components';
+
+const DownloadButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: ${({ disabled }) => disabled ? '#d7dbf8' : 'linear-gradient(120deg, var(--color-primary), #7c3aed)'};
+  color: ${({ disabled }) => disabled ? '#64748b' : '#fff'};
+  box-shadow: ${({ disabled }) => disabled ? 'none' : '0 12px 30px rgba(92, 97, 242, 0.3)'};
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  &:hover,
+  &:focus-visible {
+    transform: ${({ disabled }) => disabled ? 'none' : 'translateY(-2px)'};
+  }
+`;
+
+const DownloadIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <path d="M12 3v12m0 0 4-4m-4 4-4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M5 16v3.5a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5V16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 
 const CourseDetailPage = () => {
@@ -168,22 +195,10 @@ const CourseDetailPage = () => {
                     {course.duration && <span>Duration: {course.duration}</span>}
                   </div>
                 </div>
-                <button
-                  onClick={handleDownload}
-                  disabled={!firstLessonUnlocked}
-                  style={{
-                    background: firstLessonUnlocked ? 'linear-gradient(90deg, #6C63FF 0%, #2196F3 100%)' : '#cbd5f5',
-                    color: firstLessonUnlocked ? '#fff' : '#64748b',
-                    border: 'none',
-                    padding: '12px 24px',
-                    borderRadius: 999,
-                    fontWeight: 600,
-                    cursor: firstLessonUnlocked ? 'pointer' : 'not-allowed',
-                    boxShadow: '0 10px 24px rgba(108, 99, 255, 0.2)'
-                  }}
-                >
-                  Download
-                </button>
+                <DownloadButton onClick={handleDownload} disabled={!firstLessonUnlocked} aria-label="Download lesson video">
+                  <DownloadIcon />
+                  Download video
+                </DownloadButton>
               </div>
 
               <div style={{ marginTop: 24 }}>

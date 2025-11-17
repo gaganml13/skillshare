@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Nav = styled.nav`
   width: 100%;
@@ -23,17 +23,30 @@ const Logo = styled.div`
 
 const NavLinks = styled.ul`
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   list-style: none;
+  margin: 0;
+  padding: 0;
 
-  li {
-    font-size: 1rem;
+  a {
+    position: relative;
+    font-size: 0.95rem;
     color: var(--text-dark);
-    cursor: pointer;
-    transition: color 0.2s;
-    &:hover {
-      color: var(--primary-purple);
-    }
+    text-decoration: none;
+    font-weight: 500;
+    padding-bottom: 0.25rem;
+  }
+
+  a.active::after,
+  a:hover::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -4px;
+    height: 2px;
+    background: var(--primary-purple);
+    border-radius: 999px;
   }
 `;
 
@@ -85,15 +98,20 @@ const Navbar = () => {
         </span>
       </Logo>
       <NavLinks>
-        <li>
-          <Link to="/courses" style={{ color: 'inherit', textDecoration: 'none' }}>Browse Courses</Link>
-        </li>
-        <li>
-          <Link to="/create-course" style={{ color: 'inherit', textDecoration: 'none' }}>Become a Creator</Link>
-        </li>
-        <li>
-          <Link to="/about" style={{ color: 'inherit', textDecoration: 'none' }}>About</Link>
-        </li>
+        {[
+          { to: '/dashboard', label: 'Dashboard' },
+          { to: '/courses', label: 'Courses' },
+          { to: '/community', label: 'Community' },
+          { to: '/mentorship', label: 'Mentorship' },
+          { to: '/jobs', label: 'Jobs' },
+          { to: '/leaderboard', label: 'Leaderboard' }
+        ].map((item) => (
+          <li key={item.to}>
+            <NavLink to={item.to} style={{ color: 'inherit' }}>
+              {item.label}
+            </NavLink>
+          </li>
+        ))}
       </NavLinks>
       <Actions>
         {user ? (

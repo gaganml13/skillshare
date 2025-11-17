@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders login headline by default', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const headings = screen.getAllByRole('heading', { name: /login/i });
+  expect(headings[0]).toBeInTheDocument();
 });

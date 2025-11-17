@@ -1,0 +1,74 @@
+[
+  {
+    "id": "mentor-ava",
+    "name": "Ava Thompson",
+    "avatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Ava",
+    "title": "Staff Product Designer @ Figma",
+    "expertise": ["Product Design", "Design Systems", "UX Strategy"],
+    "rating": 4.9,
+    "ratePerHour": 85,
+    "availability": "Weekday evenings",
+    "bio": "10+ years crafting high-impact SaaS experiences. Loves turning complex workflows into intuitive journeys.",
+    "badges": ["DesignOps", "Inclusive Design"]
+  },
+  {
+    "id": "mentor-lukas",
+    "name": "Lukas Meyer",
+    "avatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Lukas",
+    "title": "Principal Frontend Engineer @ Linear",
+    "expertise": ["React", "TypeScript", "Performance"],
+    "rating": 4.8,
+    "ratePerHour": 95,
+    "availability": "Flexible across time zones",
+    "bio": "Frontend performance nerd helping teams ship silky-smooth product surfaces and design systems.",
+    "badges": ["Web Perf", "DX Mentor"]
+  },
+  {
+    "id": "mentor-samira",
+    "name": "Samira Patel",
+    "avatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Samira",
+    "title": "Head of Community @ Notion",
+    "expertise": ["Community", "Content", "Growth"],
+    "rating": 5,
+    "ratePerHour": 70,
+    "availability": "Fridays + Saturdays",
+    "bio": "Built thriving creator and educator communities across SaaS brands. Specialist in grassroots playbooks.",
+    "badges": ["Community Builder"]
+  },
+  {
+    "id": "mentor-eli",
+    "name": "Eli Navarro",
+    "avatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Eli",
+    "title": "Data Science Lead @ Duolingo",
+    "expertise": ["Data Science", "AI", "Experimentation"],
+    "rating": 4.7,
+    "ratePerHour": 110,
+    "availability": "US mornings",
+    "bio": "Runs cross-functional ML pods delivering measurable conversion lifts through experimentation.",
+    "badges": ["ML Ops", "A/B Testing"]
+  },
+  {
+    "id": "mentor-nina",
+    "name": "Nina Park",
+    "avatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Nina",
+    "title": "Product Lead @ Shopify",
+    "expertise": ["Product Strategy", "Roadmapping", "Leadership"],
+    "rating": 4.95,
+    "ratePerHour": 90,
+    "availability": "APAC friendly",
+    "bio": "Helps PMs build confident narratives, sequence bets, and align orgs around impact metrics.",
+    "badges": ["People Manager"]
+  },
+  {
+    "id": "mentor-jamal",
+    "name": "Jamal Ortiz",
+    "avatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Jamal",
+    "title": "Founder Coach & Ex-Uber PM",
+    "expertise": ["Go To Market", "Pitching", "Fundraising"],
+    "rating": 4.85,
+    "ratePerHour": 65,
+    "availability": "Weekend mornings",
+    "bio": "Guides early teams through traction experiments, investor updates, and storytelling that lands.",
+    "badges": ["Founder Friendly", "Pitch Doctor"]
+  }
+]

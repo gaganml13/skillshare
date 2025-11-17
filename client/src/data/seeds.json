@@ -1,0 +1,368 @@
+{
+  "courses": [
+    {
+      "_id": "demo-extra-1",
+      "title": "Product Strategy Playbook",
+      "description": "Design actionable product strategies with discovery sprints, metrics reviews, and stakeholder ritual templates.",
+      "category": "Product",
+      "price": 599,
+      "duration": "10h 45m",
+      "level": "Intermediate",
+      "rating": 4.9,
+      "learners": 640,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-lena", "name": "Lena Ortiz" },
+      "lessons": [
+        { "title": "North-star metrics", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", "visibility": "public" },
+        { "title": "Stakeholder map", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-10s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-2",
+      "title": "Indie Game Art Pipeline",
+      "description": "Ship a stylized indie game art pack with Blender hard-surface workflows and hand-painted textures.",
+      "category": "Art & Design",
+      "price": 449,
+      "duration": "9h 15m",
+      "level": "Intermediate",
+      "rating": 4.8,
+      "learners": 480,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-nik", "name": "Nikhil Verma" },
+      "lessons": [
+        { "title": "Block-out toolkit", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", "visibility": "public" },
+        { "title": "Texture polish", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-15s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-3",
+      "title": "AI Writing Systems Lab",
+      "description": "Pair AI copilots with your editorial workflow. Build reusable prompts, tone guides, and fact-check rails.",
+      "category": "Business",
+      "price": 399,
+      "duration": "7h 50m",
+      "level": "Beginner",
+      "rating": 4.7,
+      "learners": 710,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-jade", "name": "Jade Whitman" },
+      "lessons": [
+        { "title": "Prompt choreography", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", "visibility": "public" },
+        { "title": "Editorial QA", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-10s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-4",
+      "title": "Data Storytelling Bootcamp",
+      "description": "Craft cinematic dashboards with motion systems, insight framing, and narrative data beats.",
+      "category": "Business",
+      "price": 529,
+      "duration": "11h 20m",
+      "level": "Advanced",
+      "rating": 4.95,
+      "learners": 560,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-aaron", "name": "Aaron McConnell" },
+      "lessons": [
+        { "title": "Narrative arcs", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", "visibility": "public" },
+        { "title": "Motion blueprints", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-15s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-5",
+      "title": "Cohort Filmmaking Lab",
+      "description": "Storyboard, shoot, and edit cinematic lessons with async peer critiques and motion templates.",
+      "category": "Video & Film",
+      "price": 629,
+      "duration": "8h 20m",
+      "level": "Intermediate",
+      "rating": 4.85,
+      "learners": 540,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-aya", "name": "Aya Kumari" },
+      "lessons": [
+        { "title": "Analog to digital storyboards", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-15s.mp4", "visibility": "public" },
+        { "title": "Color pass + grading", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-20s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-6",
+      "title": "Systems Thinking for Creators",
+      "description": "Design repeatable launch engines using service blueprints, automation, and async rituals.",
+      "category": "Operations",
+      "price": 389,
+      "duration": "6h 55m",
+      "level": "Intermediate",
+      "rating": 4.7,
+      "learners": 610,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-sam", "name": "Samir Clarke" },
+      "lessons": [
+        { "title": "Mapping your service loop", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-10s.mp4", "visibility": "public" },
+        { "title": "Automation toolkit", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-20s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-7",
+      "title": "Immersive Sound Design",
+      "description": "Capture, sculpt, and spatialize audio beds for narrative podcasts and cinematic lessons.",
+      "category": "Audio",
+      "price": 459,
+      "duration": "7h 40m",
+      "level": "Advanced",
+      "rating": 4.92,
+      "learners": 420,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-ludo", "name": "Ludo Moreau" },
+      "lessons": [
+        { "title": "Foley capture kit", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", "visibility": "public" },
+        { "title": "Spatial mixes", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-10s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-8",
+      "title": "AI Course Launch Sprint",
+      "description": "Ship a mini-course in 10 days using AI-assisted scripts, lesson plans, and promo assets.",
+      "category": "AI & Automation",
+      "price": 349,
+      "duration": "5h 30m",
+      "level": "Beginner",
+      "rating": 4.75,
+      "learners": 780,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-mira", "name": "Mira Adisa" },
+      "lessons": [
+        { "title": "Prompting your outline", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", "visibility": "public" },
+        { "title": "Launch assets kit", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-15s.mp4", "visibility": "enrolled" }
+      ]
+    }
+  ],
+  "communityPosts": [
+    {
+      "id": "post-1",
+      "title": "Critique my dashboard gradients",
+      "author": "Yara Mendes",
+      "avatar": "https://i.pravatar.cc/120?img=65",
+      "timestamp": "2h ago",
+      "category": "Product",
+      "content": "Trying to balance depth vs. accessibility. Would love fresh eyes on contrast ratios!",
+      "upvotes": 54,
+      "comments": 12
+    },
+    {
+      "id": "post-2",
+      "title": "Pixel art sprint recap",
+      "author": "Luca DiMartino",
+      "avatar": "https://i.pravatar.cc/120?img=56",
+      "timestamp": "5h ago",
+      "category": "Art & Design",
+      "content": "Shared the frame-by-frame breakdown for the boss battle animation. Feedback welcome.",
+      "upvotes": 73,
+      "comments": 18
+    },
+    {
+      "id": "post-3",
+      "title": "Async pod for AI writers",
+      "author": "Mara Ellis",
+      "avatar": "https://i.pravatar.cc/120?img=12",
+      "timestamp": "Today",
+      "category": "Business",
+      "content": "Looking for 3 partners to swap systems prompts weekly. DM if you like structured experiments.",
+      "upvotes": 31,
+      "comments": 9
+    },
+    {
+      "id": "post-4",
+      "title": "Shipping my first course",
+      "author": "Hiro Tanaka",
+      "avatar": "https://i.pravatar.cc/120?img=34",
+      "timestamp": "1d ago",
+      "category": "Programming",
+      "content": "Documented every blocker turning a hackathon talk into a polished async cohort.",
+      "upvotes": 88,
+      "comments": 27
+    },
+    {
+      "id": "post-5",
+      "title": "Figma token kit",
+      "author": "Nadia Gomez",
+      "avatar": "https://i.pravatar.cc/120?img=21",
+      "timestamp": "2d ago",
+      "category": "Product",
+      "content": "Posted my design tokens converter for folks juggling multiple brands.",
+      "upvotes": 41,
+      "comments": 10
+    },
+    {
+      "id": "post-6",
+      "title": "Live critique circle",
+      "author": "Victor Ade",
+      "avatar": "https://i.pravatar.cc/120?img=5",
+      "timestamp": "3d ago",
+      "category": "Programming",
+      "content": "Hosting a pair-review session for React Islands patterns. Grab a slot!",
+      "upvotes": 25,
+      "comments": 6
+    }
+  ],
+  "mentors": [
+    {
+      "id": "mentor-1",
+      "name": "Isabella Cortez",
+      "avatar": "https://api.dicebear.com/9.x/initials/svg?seed=IC",
+      "role": "Senior Product Strategist",
+      "bio": "Helps indie founders validate positioning and packaging with lean research.",
+      "slots": ["Tue • 9:00 AM", "Thu • 2:00 PM"],
+      "focus": "Product"
+    },
+    {
+      "id": "mentor-2",
+      "name": "Malik Porter",
+      "avatar": "https://api.dicebear.com/9.x/initials/svg?seed=MP",
+      "role": "Principal Frontend Engineer",
+      "bio": "Guides devs switching from freelance to SaaS teams with advanced DX patterns.",
+      "slots": ["Wed • 4:00 PM", "Fri • 11:00 AM"],
+      "focus": "Engineering"
+    },
+    {
+      "id": "mentor-3",
+      "name": "Sofia Nguyen",
+      "avatar": "https://api.dicebear.com/9.x/initials/svg?seed=SN",
+      "role": "Creative Director",
+      "bio": "Builds cinematic visuals and helps you pitch premium creative retainers.",
+      "slots": ["Mon • 6:00 PM", "Sat • 10:00 AM"],
+      "focus": "Design"
+    },
+    {
+      "id": "mentor-4",
+      "name": "Ethan Clarke",
+      "avatar": "https://api.dicebear.com/9.x/initials/svg?seed=EC",
+      "role": "Community & Ops Coach",
+      "bio": "Scale memberships, live cohorts, and delightful onboarding funnels.",
+      "slots": ["Mon • 1:00 PM", "Thu • 11:00 AM"],
+      "focus": "Community"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "job-1",
+      "role": "Senior Product Designer",
+      "company": "Orbit Labs",
+      "location": "Remote • EU",
+      "salary": "$120k - $145k",
+      "type": "Full-time",
+      "posted": "3d ago",
+      "skills": ["Design systems", "Figma", "Motion"],
+      "applyUrl": "https://orbitlabs.design/jobs"
+    },
+    {
+      "id": "job-2",
+      "role": "Learning Content Producer",
+      "company": "Studio Lumos",
+      "location": "Hybrid • NYC",
+      "salary": "$85k - $98k",
+      "type": "Full-time",
+      "posted": "1w ago",
+      "skills": ["Video scripting", "After Effects", "Cohort ops"],
+      "applyUrl": "https://lumos.io/careers"
+    },
+    {
+      "id": "job-3",
+      "role": "Indie Dev Collaborator",
+      "company": "Solar Arcade",
+      "location": "Remote",
+      "salary": "$4k stipend",
+      "type": "Contract",
+      "posted": "Today",
+      "skills": ["Unity", "Pixel art", "FX"],
+      "applyUrl": "https://solararcade.games/collab"
+    },
+    {
+      "id": "job-4",
+      "role": "AI Curriculum Architect",
+      "company": "Notionfleet",
+      "location": "Remote",
+      "salary": "$110k - $135k",
+      "type": "Full-time",
+      "posted": "4d ago",
+      "skills": ["Prompt engineering", "Pedagogy", "Analytics"],
+      "applyUrl": "https://notionfleet.com/jobs"
+    },
+    {
+      "id": "job-5",
+      "role": "Data Storytelling Coach",
+      "company": "Beta North",
+      "location": "Remote • APAC",
+      "salary": "$95k - $120k",
+      "type": "Full-time",
+      "posted": "2w ago",
+      "skills": ["Tableau", "Narrative", "Workshop facilitation"],
+      "applyUrl": "https://betanorth.ai/jobs"
+    }
+  ],
+  "leaderboard": [
+    {
+      "id": "leader-1",
+      "name": "Zara Bennett",
+      "avatar": "https://i.pravatar.cc/120?img=47",
+      "specialty": "Frontend systems",
+      "xp": 18950,
+      "level": 42,
+      "badges": ["30-day streak", "Mentor", "Live host"],
+      "points": 2150,
+      "streak": 48
+    },
+    {
+      "id": "leader-2",
+      "name": "Mateo Cruz",
+      "avatar": "https://i.pravatar.cc/120?img=18",
+      "specialty": "Motion storytelling",
+      "xp": 17520,
+      "level": 39,
+      "badges": ["Daily shipper", "Coach"],
+      "points": 2020,
+      "streak": 41
+    },
+    {
+      "id": "leader-3",
+      "name": "Anika Bose",
+      "avatar": "https://i.pravatar.cc/120?img=11",
+      "specialty": "Product strategy",
+      "xp": 16280,
+      "level": 37,
+      "badges": ["Top reviewer", "Sprint captain"],
+      "points": 1940,
+      "streak": 33
+    },
+    {
+      "id": "leader-4",
+      "name": "Leo Martins",
+      "avatar": "https://i.pravatar.cc/120?img=8",
+      "specialty": "Game art",
+      "xp": 15110,
+      "level": 35,
+      "badges": ["Challenge finisher"],
+      "points": 1810,
+      "streak": 29
+    },
+    {
+      "id": "leader-5",
+      "name": "Rina Patel",
+      "avatar": "https://i.pravatar.cc/120?img=31",
+      "specialty": "AI storytelling",
+      "xp": 14640,
+      "level": 34,
+      "badges": ["Community mod", "Prompt architect"],
+      "points": 1750,
+      "streak": 26
+    }
+  ]
+}

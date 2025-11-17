@@ -1,0 +1,263 @@
+{
+  "channels": [
+    { "id": "all", "name": "All posts", "icon": "🌐" },
+    { "id": "web-dev", "name": "Web Dev", "icon": "🕸️" },
+    { "id": "design", "name": "Design", "icon": "🎨" },
+    { "id": "ai", "name": "AI", "icon": "🤖" },
+    { "id": "projects", "name": "Projects", "icon": "🚀" },
+    { "id": "business", "name": "Business", "icon": "📈" }
+  ],
+  "posts": [
+    {
+      "id": "post-ship-dashboard",
+      "channelId": "web-dev",
+      "author": {
+        "name": "Priya Mendes",
+        "avatar": "https://i.pravatar.cc/120?img=65",
+        "role": "Frontend Lead"
+      },
+      "timestamp": "2025-11-15T10:24:00Z",
+      "type": "text",
+      "content": "Spent the weekend refactoring our analytics dashboard with TanStack Table + Suspense. Shared the perf wins and setup script—happy to trade notes if your charts are janky.",
+      "tags": ["React", "DX", "Performance"],
+      "reactions": { "🔥": 42, "👏": 19, "💡": 7 },
+      "comments": 18,
+      "bookmarked": false
+    },
+    {
+      "id": "post-figma-kit",
+      "channelId": "design",
+      "author": {
+        "name": "Leo Arriaga",
+        "avatar": "https://i.pravatar.cc/120?img=21",
+        "role": "Product Designer"
+      },
+      "timestamp": "2025-11-14T18:05:00Z",
+      "type": "image",
+      "content": "New token-driven UI kit drop — added motion presets + code-ready spacing maps.",
+      "image": "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1200&q=80",
+      "tags": ["Design Systems", "Figma"],
+      "reactions": { "🔥": 35, "👏": 22, "💡": 12 },
+      "comments": 26,
+      "bookmarked": true
+    },
+    {
+      "id": "post-ai-prompt-clinic",
+      "channelId": "ai",
+      "author": {
+        "name": "Nadia Gomez",
+        "avatar": "https://i.pravatar.cc/120?img=47",
+        "role": "AI Writer"
+      },
+      "timestamp": "2025-11-16T07:55:00Z",
+      "type": "poll",
+      "content": "Which prompt clinic should we host next week?",
+      "poll": {
+        "question": "Pick the clinic",
+        "options": [
+          { "id": "ops-1", "label": "Storytelling for launches", "votes": 34 },
+          { "id": "ops-2", "label": "Prompt chaining QA", "votes": 27 },
+          { "id": "ops-3", "label": "Agentic workflows", "votes": 19 }
+        ]
+      },
+      "tags": ["Prompts", "Workflows"],
+      "reactions": { "🔥": 18, "👏": 9, "💡": 21 },
+      "comments": 15,
+      "bookmarked": false
+    },
+    {
+      "id": "post-build-in-public",
+      "channelId": "projects",
+      "author": {
+        "name": "Ara Bhandari",
+        "avatar": "https://i.pravatar.cc/120?img=32",
+        "role": "Indie Hacker"
+      },
+      "timestamp": "2025-11-13T12:10:00Z",
+      "type": "text",
+      "content": "Livestreamed the new onboarding for our async cohort. Shared the Notion doc + KPI template inside the thread.",
+      "tags": ["BuildInPublic", "Cohorts"],
+      "reactions": { "🔥": 28, "👏": 17, "💡": 11 },
+      "comments": 9,
+      "bookmarked": false
+    },
+    {
+      "id": "post-ai-handoff",
+      "channelId": "business",
+      "author": {
+        "name": "Marcus Lee",
+        "avatar": "https://i.pravatar.cc/120?img=52",
+        "role": "Operations"
+      },
+      "timestamp": "2025-11-12T09:02:00Z",
+      "type": "text",
+      "content": "Drafted an AI handoff checklist for our CX pods—covers guardrails, macros, and humane escalation paths.",
+      "tags": ["Ops", "CX"],
+      "reactions": { "🔥": 22, "👏": 15, "💡": 8 },
+      "comments": 6,
+      "bookmarked": false
+    },
+    {
+      "id": "post-design-feedback",
+      "channelId": "design",
+      "author": {
+        "name": "Sora Liang",
+        "avatar": "https://i.pravatar.cc/120?img=11",
+        "role": "Brand Designer"
+      },
+      "timestamp": "2025-11-11T21:40:00Z",
+      "type": "image",
+      "content": "Looking for notes on this hero motion study before hand-off.",
+      "image": "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=1200&q=80",
+      "tags": ["Motion", "Feedback"],
+      "reactions": { "🔥": 31, "👏": 28, "💡": 10 },
+      "comments": 23,
+      "bookmarked": false
+    }
+  ],
+  "events": [
+    {
+      "id": "event-ai-sprint",
+      "title": "AI Sprint: Agents that Ship",
+      "description": "Pair up to design micro-agents that automate your launch workflow. We'll benchmark prompts, share failure modes, and ship tiny copilots by the end of the session.",
+      "hostId": "contrib-3",
+      "hostName": "Nadia Gomez",
+      "hostAvatar": "https://i.pravatar.cc/120?img=47",
+      "date": "2025-11-22",
+      "time": "17:00",
+      "location": "Remote • Zoom",
+      "mode": "remote",
+      "skillsRequired": ["Prompt Design", "React", "Automation"],
+      "capacity": 16,
+      "attendees": [
+        {
+          "id": "attendee-priya",
+          "name": "Priya Mendes",
+          "avatar": "https://i.pravatar.cc/120?img=65",
+          "skills": ["React", "DX", "Systems"],
+          "availability": "Weeknights"
+        },
+        {
+          "id": "attendee-ara",
+          "name": "Ara Bhandari",
+          "avatar": "https://i.pravatar.cc/120?img=32",
+          "skills": ["Automation", "Cohorts", "Product"],
+          "availability": "Weekends"
+        }
+      ],
+      "createdAt": "2025-11-10T10:00:00Z",
+      "active": true
+    },
+    {
+      "id": "event-mentor-lab",
+      "title": "Mentor Lab: Async Peer Reviews",
+      "description": "Small breakout pods swap Looms and track feedback in a shared Notion doc. Bring a 5-minute walkthrough of your latest build.",
+      "hostId": "contrib-2",
+      "hostName": "Leo Arriaga",
+      "hostAvatar": "https://i.pravatar.cc/120?img=21",
+      "date": "2025-11-24",
+      "time": "12:00",
+      "location": "Hybrid • NYC Loft",
+      "mode": "hybrid",
+      "skillsRequired": ["Product Strategy", "Critique", "Storytelling"],
+      "capacity": 12,
+      "attendees": [
+        {
+          "id": "attendee-leo",
+          "name": "Leo Arriaga",
+          "avatar": "https://i.pravatar.cc/120?img=21",
+          "skills": ["Design Systems", "Storytelling", "Motion"],
+          "availability": "Afternoons"
+        },
+        {
+          "id": "attendee-sora",
+          "name": "Sora Liang",
+          "avatar": "https://i.pravatar.cc/120?img=11",
+          "skills": ["Art Direction", "Motion", "Feedback"],
+          "availability": "Mornings"
+        }
+      ],
+      "createdAt": "2025-11-09T14:35:00Z",
+      "active": true
+    },
+    {
+      "id": "event-growth-playbook",
+      "title": "Growth Playbook Jam",
+      "description": "Work in triads to debug onboarding funnels. We'll remix KPIs, instrumentation, and retention loops for your current cohort.",
+      "hostId": "contrib-5",
+      "hostName": "Marcus Lee",
+      "hostAvatar": "https://i.pravatar.cc/120?img=52",
+      "date": "2025-11-28",
+      "time": "09:30",
+      "location": "Remote • Gather",
+      "mode": "remote",
+      "skillsRequired": ["Analytics", "Ops", "UX Writing"],
+      "capacity": 20,
+      "attendees": [
+        {
+          "id": "attendee-marcus",
+          "name": "Marcus Lee",
+          "avatar": "https://i.pravatar.cc/120?img=52",
+          "skills": ["Operations", "Analytics", "Automation"],
+          "availability": "Mornings"
+        },
+        {
+          "id": "attendee-mira",
+          "name": "Mira Adisa",
+          "avatar": "https://i.pravatar.cc/120?img=31",
+          "skills": ["AI Storytelling", "Marketing", "Product"],
+          "availability": "Evenings"
+        }
+      ],
+      "createdAt": "2025-11-07T09:00:00Z",
+      "active": true
+    }
+  ],
+  "challenges": [
+    { "id": "challenge-ships", "title": "24hr Ship Sprint", "cta": "Submit", "description": "Drop a before/after gif of what you shipped this weekend." },
+    { "id": "challenge-ai", "title": "AI Prompt Relay", "cta": "Join", "description": "Stack a three-step automation and share the Loom." },
+    { "id": "challenge-design", "title": "Palette Remix", "cta": "Upload", "description": "Recolor a classic brand using the 2026 tone deck." }
+  ],
+  "contributors": [
+    {
+      "id": "contrib-1",
+      "name": "Priya Mendes",
+      "avatar": "https://i.pravatar.cc/120?img=65",
+      "xp": 2480,
+      "skills": ["React", "DX", "Systems"],
+      "availability": "Weeknights"
+    },
+    {
+      "id": "contrib-2",
+      "name": "Leo Arriaga",
+      "avatar": "https://i.pravatar.cc/120?img=21",
+      "xp": 2265,
+      "skills": ["Design Systems", "Critique", "Storytelling"],
+      "availability": "Afternoons"
+    },
+    {
+      "id": "contrib-3",
+      "name": "Nadia Gomez",
+      "avatar": "https://i.pravatar.cc/120?img=47",
+      "xp": 2130,
+      "skills": ["Prompt Design", "Content", "Ops"],
+      "availability": "Weekends"
+    },
+    {
+      "id": "contrib-4",
+      "name": "Ara Bhandari",
+      "avatar": "https://i.pravatar.cc/120?img=32",
+      "xp": 1980,
+      "skills": ["Automation", "Cohorts", "Product"],
+      "availability": "Weekends"
+    },
+    {
+      "id": "contrib-5",
+      "name": "Marcus Lee",
+      "avatar": "https://i.pravatar.cc/120?img=52",
+      "xp": 1765,
+      "skills": ["Analytics", "Operations", "UX Writing"],
+      "availability": "Mornings"
+    }
+  ]
+}

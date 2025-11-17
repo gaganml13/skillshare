@@ -1,4 +1,7 @@
+import { getCourses, getJobs, getLeaderboard, getMentors, getPosts } from './loadSeeds';
+
 export const SAMPLE_ENROLL_STORAGE_KEY = 'skillshare:sample-enrollments';
+const CREATED_COURSES_STORAGE_KEY = 'skillshare:created-courses';
 
 const safeParse = (value, fallback) => {
   try {
@@ -7,6 +10,37 @@ const safeParse = (value, fallback) => {
   } catch (err) {
     return fallback;
   }
+};
+
+const readLocalCreatedCourses = () => {
+  if (typeof window === 'undefined') return [];
+  const raw = window.localStorage.getItem(CREATED_COURSES_STORAGE_KEY);
+  return raw ? safeParse(raw, []) : [];
+};
+
+export const getLocalCreatedCourses = (ownerId) => {
+  const courses = readLocalCreatedCourses();
+  if (!ownerId) return courses;
+  return courses.filter((course) => course.ownerId === ownerId);
+};
+
+export const storeLocalCreatedCourse = (course) => {
+  if (typeof window === 'undefined') return course;
+  if (!course || typeof course !== 'object') return course;
+  const existing = readLocalCreatedCourses().filter((entry) => entry?._id !== course._id);
+  const next = [course, ...existing].slice(0, 12);
+  window.localStorage.setItem(CREATED_COURSES_STORAGE_KEY, JSON.stringify(next));
+  return course;
+};
+
+export const clearLocalCreatedCourses = (ownerId) => {
+  if (typeof window === 'undefined') return;
+  if (!ownerId) {
+    window.localStorage.removeItem(CREATED_COURSES_STORAGE_KEY);
+    return;
+  }
+  const remaining = readLocalCreatedCourses().filter((course) => course.ownerId !== ownerId);
+  window.localStorage.setItem(CREATED_COURSES_STORAGE_KEY, JSON.stringify(remaining));
 };
 
 export const getStoredSampleEnrollments = () => {
@@ -30,7 +64,7 @@ export const clearSampleEnrollment = (courseId) => {
 
 export const isSampleEnrolled = (courseId) => getStoredSampleEnrollments().includes(courseId);
 
-export const SAMPLE_COURSES = [
+const baseSampleCourses = [
   {
     _id: 'demo-1',
     title: 'Web Development Masterclass',
@@ -108,6 +142,25 @@ export const SAMPLE_COURSES = [
   }
 ];
 
-export const getSampleCourseById = (courseId) => SAMPLE_COURSES.find(course => String(course._id) === String(courseId));
+const courseSeeds = getCourses();
+const additionalCourses = Array.isArray(courseSeeds)
+  ? courseSeeds.map((course, idx) => ({
+      ...course,
+      _id: course._id || `demo-extra-${idx}`
+    }))
+  : [];
+
+export const SAMPLE_COURSES = [...baseSampleCourses, ...additionalCourses];
+export const COMMUNITY_POSTS = getPosts();
+export const MENTORS = getMentors();
+export const JOB_LISTINGS = getJobs();
+export const LEADERBOARD = getLeaderboard();
+
+export const getSampleCourseById = (courseId) => {
+  if (!courseId) return undefined;
+  const localCourse = readLocalCreatedCourses().find((course) => String(course._id) === String(courseId));
+  if (localCourse) return localCourse;
+  return SAMPLE_COURSES.find((course) => String(course._id) === String(courseId));
+};
 
 export const isSampleCourseId = (courseId) => Boolean(getSampleCourseById(courseId));

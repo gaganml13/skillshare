@@ -71,7 +71,29 @@ An advanced, interactive e-learning platform designed to empower users with coll
 
 ## 🚀 Getting Started
 
-(This section will contain detailed setup and run instructions, similar to before.)
+### Client (React)
+
+```
+cd client
+npm install
+npm start
+```
+
+* `npm start` launches the redesigned dashboard with the gradient header hero, responsive course grid, AI chat widget, and modern card layout.
+* `npm run build` produces a production bundle in `client/build`.
+* `npm test` runs the Jest + React Testing Library suite, including the new `CourseCard` and `ProgressBar` coverage.
+
+### Server (Express)
+
+```
+cd server
+npm install
+npm start
+```
+
+The backend API is unchanged by this PR, so the existing `.env` expectations remain the same.
+
+> Tip: When experimenting with the new `useCourseProgress` hook or `AIChatWidget`, run `npm start` in both `client/` and `server/` to keep sample data and API responses in sync.
 
 ---
 

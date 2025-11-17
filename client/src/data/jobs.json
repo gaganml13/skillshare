@@ -1,0 +1,67 @@
+[
+  {
+    "id": "job-senior-product-designer",
+    "title": "Senior Product Designer",
+    "company": "Orbit Labs",
+    "location": "Remote • North America",
+    "type": "Full-time • Remote",
+    "salaryRange": "$135k – $160k + equity",
+    "description": "Own the end-to-end experience for our creator analytics suite, partnering with PMM and research to ship delightful workflows.",
+    "skills": ["Figma", "Design Systems", "User Research", "Prototyping"],
+    "tags": ["Series B", "Async", "Health"],
+    "posted": "2d ago",
+    "logo": "https://api.dicebear.com/7.x/shapes/svg?seed=OrbitLabs"
+  },
+  {
+    "id": "job-ml-platform-engineer",
+    "title": "ML Platform Engineer",
+    "company": "Saffron AI",
+    "location": "New York, NY",
+    "type": "Hybrid • Full-time",
+    "salaryRange": "$150k – $190k + bonus",
+    "description": "Scale our experimentation platform, harden feature stores, and help product teams iterate on applied ML use cases.",
+    "skills": ["Python", "Kubeflow", "AWS", "Data Engineering"],
+    "tags": ["AI", "Growth Stage"],
+    "posted": "1d ago",
+    "logo": "https://api.dicebear.com/7.x/shapes/svg?seed=SaffronAI"
+  },
+  {
+    "id": "job-growth-marketer",
+    "title": "Lifecycle & Growth Marketer",
+    "company": "Lumen Courses",
+    "location": "Remote • EU",
+    "type": "Contract • Remote",
+    "salaryRange": "$90k – $120k equivalent",
+    "description": "Ship high-performing lifecycle journeys, conversion experiments, and launch playbooks for our flagship community.",
+    "skills": ["Lifecycle", "Braze", "Copywriting", "Analytics"],
+    "tags": ["EdTech", "3 month"],
+    "posted": "4h ago",
+    "logo": "https://api.dicebear.com/7.x/shapes/svg?seed=LumenCourses"
+  },
+  {
+    "id": "job-frontend-architect",
+    "title": "Frontend Architect",
+    "company": "Pulse Metrics",
+    "location": "Austin, TX",
+    "type": "On-site • Full-time",
+    "salaryRange": "$140k – $175k",
+    "description": "Lead the evolution of our design system and performance budget across multiple analytics pods.",
+    "skills": ["React", "TypeScript", "Performance", "Design Systems"],
+    "tags": ["Analytics", "Team Lead"],
+    "posted": "3d ago",
+    "logo": "https://api.dicebear.com/7.x/shapes/svg?seed=PulseMetrics"
+  },
+  {
+    "id": "job-community-strategist",
+    "title": "Community Strategist",
+    "company": "Gather Studio",
+    "location": "Remote • LATAM",
+    "type": "Part-time • Remote",
+    "salaryRange": "$70k – $85k prorated",
+    "description": "Architect creator programs, run feedback rituals, and publish monthly health reports for our learning collective.",
+    "skills": ["Community", "Content", "Operations", "Notion"],
+    "tags": ["Creator Economy", "Part-time"],
+    "posted": "5h ago",
+    "logo": "https://api.dicebear.com/7.x/shapes/svg?seed=GatherStudio"
+  }
+]

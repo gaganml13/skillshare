@@ -8,6 +8,10 @@ import { AuthProvider } from './context/AuthContext';
 import DashboardPage from './pages/DashboardPage';
 import CreateCoursePage from './pages/CreateCoursePage';
 import CoursesPage from './pages/CoursesPage';
+import CommunityPage from './pages/CommunityPage';
+import MentorshipPage from './pages/MentorshipPage';
+import JobsPage from './pages/JobsPage';
+import LeaderboardPage from './pages/LeaderboardPage';
 import HomePage from './pages/HomePage';
 import ProtectedRoute from './components/routing/ProtectedRoute';
 import CourseDetailPage from './pages/CourseDetailPage';
@@ -35,6 +39,26 @@ function App() {
           <Route path="/courses" element={
             <ProtectedRoute>
               <CoursesPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/community" element={
+            <ProtectedRoute>
+              <CommunityPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/mentorship" element={
+            <ProtectedRoute>
+              <MentorshipPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/jobs" element={
+            <ProtectedRoute>
+              <JobsPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/leaderboard" element={
+            <ProtectedRoute>
+              <LeaderboardPage />
             </ProtectedRoute>
           } />
           <Route path="/course/:id" element={

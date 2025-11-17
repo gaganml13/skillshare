@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from '../../context/AuthContext';
-import { storeSampleEnrollment, isSampleCourseId, isSampleEnrolled } from '../../utils/sampleCourses';
-import ProgressBar from '../ui/ProgressBar';
-import { useCourseProgress } from '../../hooks/useCourseProgress';
+import { AuthContext } from '../context/AuthContext';
+import { storeSampleEnrollment, isSampleCourseId, isSampleEnrolled } from '../utils/sampleCourses';
+import ProgressBar from './ui/ProgressBar';
+import { useCourseProgress } from '../hooks/useCourseProgress';
 
 const Card = styled.article`
   position: relative;
@@ -182,8 +182,8 @@ const StatusTag = styled.span`
   border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 600;
-  background: rgba(16, 185, 129, 0.12);
-  color: var(--color-success);
+  background: ${({ $variant }) => ($variant === 'warning' ? 'rgba(251, 191, 36, 0.18)' : 'rgba(16, 185, 129, 0.12)')};
+  color: ${({ $variant }) => ($variant === 'warning' ? '#b45309' : 'var(--color-success)')};
 `;
 
 const CourseCard = ({
@@ -318,6 +318,7 @@ const CourseCard = ({
           {priceLabel && <MetaChip>{priceLabel}</MetaChip>}
         </MetaRow>
         {isEnrolled && <StatusTag>Enrolled</StatusTag>}
+        {course.localOnly && <StatusTag $variant="warning">Offline draft</StatusTag>}
         <ProgressBar value={progress} label={isEnrolled ? `Course progress: ${progress}%` : 'Preview progress'} />
         {canShowEnroll && (
           <CTAGroup>
