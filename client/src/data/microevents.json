@@ -1,0 +1,49 @@
+{
+  "microEvents": [
+    {
+      "id": "micro-daily-code",
+      "title": "Daily Coding Push-Up",
+      "type": "Coding Challenge",
+      "tags": ["Algorithms", "Pairing"],
+      "startTime": "2025-11-18T19:00:00.000Z",
+      "duration": 15,
+      "hostId": "attendee-priya",
+      "hostName": "Priya Mendes",
+      "hostAvatar": "https://i.pravatar.cc/120?img=65",
+      "description": "Pair up for 15 minutes and refactor a shared snippet before sharing takeaways.",
+      "prompt": "Refactor the leaderboard stream so it handles 10x more events. Share the pseudo-code in chat.",
+      "roomUrl": "#",
+      "capacity": 25
+    },
+    {
+      "id": "micro-study-with-me",
+      "title": "Focus Sprint: Study With Me",
+      "type": "Study With Me",
+      "tags": ["Deep Work", "Pomodoro"],
+      "startTime": "2025-11-18T21:00:00.000Z",
+      "duration": 20,
+      "hostId": "contrib-4",
+      "hostName": "Ara Bhandari",
+      "hostAvatar": "https://i.pravatar.cc/120?img=32",
+      "description": "Silent co-working sprint with intention-setting at the top and accountability at the end.",
+      "prompt": "Set a single metric you want to improve in the next 20 minutes. Share your intention before we mute.",
+      "roomUrl": "#",
+      "capacity": 40
+    },
+    {
+      "id": "micro-interview-speedrun",
+      "title": "Interview Speedrun: Systems",
+      "type": "Interview Q",
+      "tags": ["Systems", "Mock Interview"],
+      "startTime": "2025-11-19T15:00:00.000Z",
+      "duration": 18,
+      "hostId": "contrib-5",
+      "hostName": "Marcus Lee",
+      "hostAvatar": "https://i.pravatar.cc/120?img=52",
+      "description": "Work through a live system design warm-up then critique each other's framing.",
+      "prompt": "Design a rolling cache invalidator for weekly insights. Think out loud.",
+      "roomUrl": "#",
+      "capacity": 18
+    }
+  ]
+}

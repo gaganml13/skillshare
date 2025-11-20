@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from '../context/AuthContext';
 import { Link, NavLink } from 'react-router-dom';
+import AccountMenu from './AccountMenu';
 
 const Nav = styled.nav`
   width: 100%;
@@ -87,8 +88,13 @@ const GetStartedBtn = styled.button`
 
 
 const Navbar = () => {
-  const { user, logout, loading } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
+  const accountButtonRef = useRef(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   if (loading) return null;
+
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <Nav>
@@ -99,13 +105,15 @@ const Navbar = () => {
       </Logo>
       <NavLinks>
         {[
-          { to: '/dashboard', label: 'Dashboard' },
-          { to: '/courses', label: 'Courses' },
-          { to: '/community', label: 'Community' },
-          { to: '/mentorship', label: 'Mentorship' },
-          { to: '/jobs', label: 'Jobs' },
-          { to: '/leaderboard', label: 'Leaderboard' }
-        ].map((item) => (
+                { to: '/dashboard', label: 'Dashboard' },
+                { to: '/courses', label: 'Courses' },
+                { to: '/community', label: 'Community' },
+                { to: '/mentorship', label: 'Mentorship' },
+                { to: '/jobs', label: 'Jobs' },
+                { to: '/leaderboard', label: 'Leaderboard' },
+                { to: '/partners', label: 'Partners' },
+                { to: '/live-events', label: 'Live' }
+              ].map((item) => (
           <li key={item.to}>
             <NavLink to={item.to} style={{ color: 'inherit' }}>
               {item.label}
@@ -115,12 +123,26 @@ const Navbar = () => {
       </NavLinks>
       <Actions>
         {user ? (
-          <>
-            <span style={{ color: 'var(--primary-purple)', fontWeight: 500, marginRight: '0.5rem' }}>
-              {user.name}
-            </span>
-            <LoginBtn onClick={logout}>Logout</LoginBtn>
-          </>
+          <div className="nav-account">
+            <button
+              type="button"
+              className="nav-account-button"
+              aria-haspopup="true"
+              aria-expanded={isMenuOpen}
+              onClick={toggleMenu}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  toggleMenu();
+                }
+              }}
+              ref={accountButtonRef}
+            >
+              <span className="sr-only">Open account menu</span>
+              <span aria-hidden="true">{user.name?.[0]?.toUpperCase() || 'U'}</span>
+            </button>
+            <AccountMenu isOpen={isMenuOpen} onClose={closeMenu} anchorRef={accountButtonRef} user={user} />
+          </div>
         ) : (
           <>
             <Link to="/login" style={{ textDecoration: 'none' }}><LoginBtn>Log In</LoginBtn></Link>

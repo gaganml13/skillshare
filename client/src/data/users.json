@@ -1,0 +1,62 @@
+[
+  {
+    "id": "user-priya",
+    "name": "Priya Mendes",
+    "avatar": "https://i.pravatar.cc/120?img=65",
+    "experience": "advanced",
+    "timeZone": "UTC-5",
+    "availability": ["Mon 19:00-21:00", "Wed 07:00-08:00", "Sat 10:00-12:00"],
+    "goals": ["Ship weekly frontend experiments", "Grow speaking practice"],
+    "focusTags": ["frontend", "public speaking", "shipping"]
+  },
+  {
+    "id": "user-ara",
+    "name": "Ara Bhandari",
+    "avatar": "https://i.pravatar.cc/120?img=32",
+    "experience": "advanced",
+    "timeZone": "UTC+5:30",
+    "availability": ["Daily 06:30-07:00", "Fri 20:00-21:00"],
+    "goals": ["Daily study sprint", "Automate accountability prompts"],
+    "focusTags": ["automation", "study", "ai"]
+  },
+  {
+    "id": "user-leo",
+    "name": "Leo Arriaga",
+    "avatar": "https://i.pravatar.cc/120?img=21",
+    "experience": "intermediate",
+    "timeZone": "UTC-3",
+    "availability": ["Tue 18:00-19:00", "Thu 18:00-19:00", "Sun 11:00-12:00"],
+    "goals": ["Run critique circle", "Ship micro animations"],
+    "focusTags": ["design", "motion", "critique"]
+  },
+  {
+    "id": "user-marcus",
+    "name": "Marcus Lee",
+    "avatar": "https://i.pravatar.cc/120?img=52",
+    "experience": "advanced",
+    "timeZone": "UTC+8",
+    "availability": ["Mon 08:00-09:00", "Thu 08:00-09:00"],
+    "goals": ["Improve interview narratives", "Ship weekly ops teardown"],
+    "focusTags": ["ops", "interview", "growth"]
+  },
+  {
+    "id": "user-nadia",
+    "name": "Nadia Gomez",
+    "avatar": "https://i.pravatar.cc/120?img=47",
+    "experience": "intermediate",
+    "timeZone": "UTC-5",
+    "availability": ["Wed 20:00-21:00", "Sat 15:00-16:00"],
+    "goals": ["Draft AI writing routine", "Share prompt teardowns"],
+    "focusTags": ["ai", "writing", "ops"]
+  },
+  {
+    "id": "user-sora",
+    "name": "Sora Liang",
+    "avatar": "https://i.pravatar.cc/120?img=11",
+    "experience": "beginner",
+    "timeZone": "UTC+1",
+    "availability": ["Mon 19:00-20:00", "Wed 19:00-20:00", "Sat 09:00-10:00"],
+    "goals": ["Build design crit habit", "Practice presenting"],
+    "focusTags": ["design", "presentation", "practice"]
+  }
+]

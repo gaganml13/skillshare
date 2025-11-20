@@ -13,6 +13,8 @@ import MentorshipPage from './pages/MentorshipPage';
 import JobsPage from './pages/JobsPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import HomePage from './pages/HomePage';
+import PartnersPage from './pages/PartnersPage';
+import LiveEventsPage from './pages/LiveEventsPage';
 import ProtectedRoute from './components/routing/ProtectedRoute';
 import CourseDetailPage from './pages/CourseDetailPage';
 import { Navigate } from 'react-router-dom';
@@ -61,6 +63,11 @@ function App() {
               <LeaderboardPage />
             </ProtectedRoute>
           } />
+          <Route path="/partners" element={
+            <ProtectedRoute>
+              <PartnersPage />
+            </ProtectedRoute>
+          } />
           <Route path="/course/:id" element={
             <ProtectedRoute>
               <CourseDetailPage />
@@ -69,6 +76,11 @@ function App() {
           <Route path="/home" element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/live-events" element={
+            <ProtectedRoute>
+              <LiveEventsPage />
             </ProtectedRoute>
           } />
           <Route path="*" element={<Navigate to="/" replace />} />
