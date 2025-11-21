@@ -28,9 +28,9 @@ const AccountMenu = ({ isOpen, anchorRef, onClose, user }) => {
   const menuItems = useMemo(
     () => [
       { id: 'profile', label: 'Profile', to: '/account#profile' },
-      { id: 'security', label: 'Security', to: '/account#security' },
+      { id: 'password', label: 'Change Password', to: '/account#password' },
       { id: 'downloads', label: 'Downloads', to: '/downloads' },
-      { id: 'preferences', label: 'Preferences', to: '/account#preferences' },
+      { id: 'email', label: 'Email Preferences', to: '/account#email-preferences' },
       { id: 'feedback', label: 'Feedback', to: '/account#feedback' }
     ],
     []
@@ -75,6 +75,9 @@ const AccountMenu = ({ isOpen, anchorRef, onClose, user }) => {
     } catch (error) {
       console.info('account-menu: logout fallback engaged', error);
     }
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('auth');
+    }
     createToast('Successfully signed out');
     onClose();
     setTimeout(() => {
@@ -115,7 +118,7 @@ const AccountMenu = ({ isOpen, anchorRef, onClose, user }) => {
         ))}
       </ul>
       <button type="button" className="account-menu__logout" onClick={handleLogout}>
-        Sign out / Logout
+        Logout
       </button>
     </div>
   );

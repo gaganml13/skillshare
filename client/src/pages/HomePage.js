@@ -1,17 +1,28 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import HeaderHero from '../components/HeaderHero';
 import KPIGrid from '../components/KPIGrid';
 import FilterPills from '../components/FilterPills';
 import CourseGrid from '../components/CourseGrid';
 import AIChatWidget from '../components/AIChatWidget';
-import { getCourses, getJobs, getLeaderboard, getPosts } from '../utils/loadSeeds';
+import { getJobs } from '../utils/loadSeeds';
+import { getStoredCourses } from '../utils/dataStore';
 
 const HomePage = () => {
-  const courses = useMemo(() => getCourses(), []);
-  const communityPosts = useMemo(() => getPosts().slice(0, 3), []);
+  const [courses, setCourses] = useState(() => getStoredCourses());
+  const [loadingCourses, setLoadingCourses] = useState(true);
   const jobs = useMemo(() => getJobs().slice(0, 3), []);
-  const leaderboard = useMemo(() => getLeaderboard().slice(0, 3), []);
   const [activeCategory, setActiveCategory] = useState('All');
+
+  useEffect(() => {
+    const refresh = () => {
+      setCourses(getStoredCourses());
+      setLoadingCourses(false);
+    };
+    refresh();
+    if (typeof window === 'undefined') return () => {};
+    window.addEventListener('courses:updated', refresh);
+    return () => window.removeEventListener('courses:updated', refresh);
+  }, []);
 
   const heroKpis = [
     { label: 'Learners online', value: '3.1k', meta: 'Right now' },
@@ -52,7 +63,9 @@ const HomePage = () => {
               <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">Curated playlists</p>
               <h2 className="text-2xl font-semibold text-slate-900">Pick a category to start</h2>
             </div>
-            <p className="text-sm text-slate-500">{filteredCourses.length} featured picks</p>
+            <p className="text-sm text-slate-500">
+              {loadingCourses ? 'Refreshing courses…' : `${filteredCourses.length} featured picks`}
+            </p>
           </div>
           <div className="mt-5">
             <FilterPills

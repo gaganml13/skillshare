@@ -21,7 +21,7 @@ const EventCard = ({
   const joinLabel = isJoined ? 'Leave event' : 'Join event';
 
   return (
-    <article className="event-card fade-up" aria-labelledby={`event-${event.id}-title`}>
+    <article className="card event-card fade-up" aria-labelledby={`event-${event.id}-title`}>
       <header className="event-card__header">
         <div className="event-card__host">
           <img src={event.hostAvatar} alt={event.hostName} className="event-card__host-avatar" />

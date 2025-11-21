@@ -96,149 +96,197 @@ const QUICK_TILES = [
 
 const Shell = styled.main`
   min-height: 100vh;
-  background: #f5f7fb;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 280px);
   padding-bottom: 4rem;
-`;
-
-const NavBar = styled.nav`
-  width: 100%;
-  background: #ffffff;
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
-`;
-
-const NavInner = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-`;
-
-const BrandLink = styled(Link)`
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #312e81;
-  text-decoration: none;
-`;
-
-const NavCluster = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  flex-wrap: wrap;
-`;
-
-const NavChip = styled(Link)`
-  text-decoration: none;
-  border-radius: 999px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  padding: 0.45rem 0.9rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #0f172a;
-  transition: transform 200ms ease, box-shadow 200ms ease;
-
-  &:hover,
-  &:focus-visible {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 30px rgba(79, 70, 229, 0.2);
-  }
-`;
-
-const IconBubble = styled.span`
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  background: ${({ accent }) => accent || 'linear-gradient(135deg,#818cf8,#6366f1)'};
-`;
-
-const UserChip = styled.span`
-  border-radius: 999px;
-  background: #e0e7ff;
-  padding: 0.35rem 0.9rem;
-  font-weight: 600;
-  color: #312e81;
 `;
 
 const Content = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 3rem 1.5rem 0;
-`;
-
-const Layout = styled.div`
+  padding: 2.5rem 1.5rem 0;
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 2rem;
 `;
 
-const MainColumn = styled.div`
+const HeroCard = styled.section`
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  padding: clamp(1.5rem, 3vw, 2.75rem);
+  box-shadow: 0 35px 80px rgba(15, 23, 42, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  backdrop-filter: blur(16px);
+`;
+
+const QuickSection = styled.section`
+  border-radius: 2rem;
+  background: #ffffff;
+  padding: 1.75rem;
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: 1.5rem;
+
+  @media (max-width: 640px) {
+    padding: 1.25rem;
+  }
 `;
 
-const QuickGrid = styled.section`
+const QuickHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  h2 {
+    margin: 0.15rem 0 0;
+    font-size: 1.35rem;
+    color: #0f172a;
+  }
+
+  p {
+    margin: 0;
+    color: #475569;
+  }
+
+  span {
+    font-size: 0.9rem;
+    color: #64748b;
+  }
+`;
+
+const QuickGrid = styled.div`
   display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
 `;
 
 const QuickCard = styled(Link)`
   text-decoration: none;
-  border-radius: 1.75rem;
-  background: #fff;
-  padding: 1.25rem;
-  box-shadow: 0 25px 50px rgba(15, 23, 42, 0.08);
-  border: 1px solid rgba(99, 102, 241, 0.08);
-  color: #0f172a;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(99, 102, 241, 0.14);
+  padding: 1rem;
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.9) 0%, #fff 100%);
+  box-shadow: 0 25px 45px rgba(15, 23, 42, 0.05);
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  align-items: flex-start;
+  gap: 0.85rem;
+  transition: transform 180ms ease, box-shadow 180ms ease;
 
   &:hover,
   &:focus-visible {
-    transform: translateY(-4px);
-    box-shadow: 0 30px 55px rgba(15, 23, 42, 0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 35px 60px rgba(99, 102, 241, 0.18);
+    outline: none;
   }
+`;
+
+const QuickIcon = styled.span`
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  align-items: center;
+  justify-content: center;
+  display: inline-flex;
+  color: #fff;
+  background: ${({ accent }) => accent || 'var(--primary-purple)'};
+  flex-shrink: 0;
 `;
 
 const QuickLabel = styled.h3`
   margin: 0;
   font-size: 1rem;
   font-weight: 700;
+  color: #0f172a;
 `;
 
 const QuickCopy = styled.p`
-  margin: 0;
+  margin: 0.35rem 0 0;
   color: #475569;
   font-size: 0.9rem;
 `;
 
-const AsideColumn = styled.aside`
-  display: none;
+const MomentumSection = styled.section`
+  border-radius: 2rem;
+  background: #0f172a;
+  color: #fff;
+  padding: 2rem;
+  box-shadow: 0 40px 80px rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (max-width: 640px) {
+    padding: 1.5rem;
+  }
 `;
 
-const MobileRailButton = styled.button`
-  display: none;
+const MomentumHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(248, 250, 252, 0.75);
+  }
 `;
 
-const MobileRailPanel = styled.div`
-  display: none;
+const MomentumList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+`;
+
+const MomentumItem = styled.li`
+  border-radius: 1.25rem;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(226, 232, 240, 0.25);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: transform 180ms ease, border-color 180ms ease;
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-2px);
+    border-color: rgba(248, 250, 252, 0.65);
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #e2e8f0;
+  }
+`;
+
+const MomentumValue = styled.span`
+  font-size: 2rem;
+  font-weight: 700;
+`;
+
+const MomentumMeta = styled.p`
+  margin: 0;
+  color: rgba(248, 250, 252, 0.75);
+  font-size: 0.9rem;
+`;
+
+const StatusNotice = styled.p`
+  margin: 0;
+  color: #ef4444;
+  font-weight: 600;
 `;
 
 const DashboardPage = () => {
@@ -324,49 +372,92 @@ const DashboardPage = () => {
       meta: 'Community threads to review'
     },
     {
-      label: 'Focus minutes logged',
-      value: 145,
-      meta: 'Past 7 days',
+      label: 'Creator nudges sent',
+      value: 24,
+      meta: 'This week',
       trend: '+18% vs last week'
     }
   ];
+
+  const heroDescription = isFetching
+    ? 'Syncing the latest cohorts and enrollments...'
+    : 'Your personalized SkillverseX hub — keep streaks alive, manage cohorts, and explore fresh drops.';
+
+  const momentumCards = [
+    {
+      key: 'pods',
+      title: 'Creator pods',
+      value: createdList.length || 0,
+      meta: `${localCreatedCourses.length} local • ${remoteCreatedCourses.length} synced`
+    },
+    {
+      key: 'learners',
+      title: 'Active enrollments',
+      value: enrolledCourses.length || 0,
+      meta: 'Learners progressing this week'
+    },
+    {
+      key: 'catalog',
+      title: 'Fresh drops bookmarked',
+      value: Math.max(1, Math.min(6, featuredCourses.length || SAMPLE_COURSES.length)),
+      meta: 'Auto-refreshed from catalog'
+    }
+  ];
+
   return (
     <Shell>
-      <NavBar>
-        <NavInner>
-          <BrandLink to="/dashboard">SkillverseX</BrandLink>
-          <NavCluster>
-            {NAV_LINKS.map((item) => (
-              <NavChip key={item.key} to={item.to} aria-label={`Go to ${item.label}`}>
-                <IconBubble accent={item.accent}>{FEATURE_ICONS[item.key]}</IconBubble>
-                <span>{item.label}</span>
-              </NavChip>
-            ))}
-          </NavCluster>
-          <UserChip>{user.name}</UserChip>
-        </NavInner>
-      </NavBar>
-
       <Content>
-        <Layout>
-          <MainColumn>
-            <section className="rounded-3xl bg-white/90 p-4 shadow-xl ring-1 ring-slate-100 backdrop-blur sm:p-6">
-              <HeaderHero
-                eyebrow="Dashboard"
-                title={`Welcome back, ${user.name}`}
-                description="Your personalized SkillverseX hub — keep streaks alive, manage cohorts, and explore fresh drops."
-                chips={[{ label: 'Weekly focus • Deep Work' }, { label: 'Streak goal • 30 days' }]}
-                actions={[
-                  { label: 'Create a course', to: '/create-course' },
-                  { label: 'Browse catalog', to: '/courses', variant: 'ghost' }
-                ]}
-                rightSlot={<KPIGrid items={kpiCards} />}
-              />
-            </section>
+        <HeroCard>
+          <HeaderHero
+            eyebrow="Dashboard"
+            title={`Welcome back, ${user.name}`}
+            description={heroDescription}
+            chips={[{ label: 'Weekly sprint • Build mode' }, { label: 'Goal streak • 30 days' }]}
+            actions={[
+              { label: 'Create a course', to: '/create-course' },
+              { label: 'Browse catalog', to: '/courses', variant: 'ghost' }
+            ]}
+            rightSlot={<KPIGrid items={kpiCards} />}
+          />
+          {error && <StatusNotice role="status">{error}</StatusNotice>}
+        </HeroCard>
 
+        <QuickSection aria-label="Quick workspace shortcuts">
+          <QuickHeader>
+            <div>
+              <p>Jump back into key hubs</p>
+              <h2>Keep momentum across SkillverseX</h2>
+            </div>
+            <span>{QUICK_TILES.length} destinations</span>
+          </QuickHeader>
+          <QuickGrid>
+            {QUICK_TILES.map((tile) => (
+              <QuickCard key={tile.key} to={tile.to}>
+                <QuickIcon accent={tile.accent}>{FEATURE_ICONS[tile.key]}</QuickIcon>
+                <div>
+                  <QuickLabel>{tile.label}</QuickLabel>
+                  <QuickCopy>{tile.description}</QuickCopy>
+                </div>
+              </QuickCard>
+            ))}
+          </QuickGrid>
+        </QuickSection>
 
-          </MainColumn>
-        </Layout>
+        <MomentumSection aria-label="Creator momentum summary">
+          <MomentumHeader>
+            <h2>Momentum overview</h2>
+            <p>Real-time snapshot of your pods, enrollments, and catalog saves.</p>
+          </MomentumHeader>
+          <MomentumList>
+            {momentumCards.map((card) => (
+              <MomentumItem key={card.key}>
+                <MomentumValue>{card.value}</MomentumValue>
+                <h4>{card.title}</h4>
+                <MomentumMeta>{card.meta}</MomentumMeta>
+              </MomentumItem>
+            ))}
+          </MomentumList>
+        </MomentumSection>
       </Content>
     </Shell>
   );

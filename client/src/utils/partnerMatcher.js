@@ -1,7 +1,19 @@
 // partnerMatcher groups members based on shared goals, availability, and experience
+const safeJoin = (value, separator = ' ') => {
+  if (Array.isArray(value)) return value.join(separator);
+  if (typeof value === 'string') return value;
+  return '';
+};
+
+const ensureArray = (value, fallback = []) => {
+  if (Array.isArray(value)) return value;
+  if (value === undefined || value === null) return [...fallback];
+  return [value];
+};
+
 const tokenize = (value) => {
   if (!value) return [];
-  const base = Array.isArray(value) ? value.join(' ') : String(value);
+  const base = safeJoin(value, ' ');
   return base
     .toLowerCase()
     .replace(/[^a-z0-9\s]/g, ' ')
@@ -16,9 +28,9 @@ const normalizeProfile = (profile = {}) => ({
   name: profile.name || 'Community member',
   avatar: profile.avatar || 'https://i.pravatar.cc/120?img=55',
   experience: (profile.experience || 'intermediate').toLowerCase(),
-  goals: Array.isArray(profile.goals) ? profile.goals : [profile.goals || 'ship weekly projects'],
-  focusTags: Array.isArray(profile.focusTags) ? profile.focusTags : tokenize(profile.goals),
-  availability: Array.isArray(profile.availability) ? profile.availability : [profile.availability || 'Flexible'],
+  goals: ensureArray(profile.goals, ['ship weekly projects']),
+  focusTags: ensureArray(profile.focusTags, tokenize(profile.goals)),
+  availability: ensureArray(profile.availability, ['Flexible']),
   timeZone: profile.timeZone || 'UTC',
   hoursPerWeek: Number(profile.hoursPerWeek || profile.weeklyHours || 4)
 });
@@ -78,6 +90,24 @@ export const findPartners = (currentUser, users = [], options = {}) => {
     .slice(0, options.limit || 12);
 };
 
+const buildSuggestionReason = (candidate) => {
+  if (candidate.overlapDays?.length) {
+    return `Shares ${candidate.overlapDays.length} focus window${candidate.overlapDays.length > 1 ? 's' : ''}`;
+  }
+  if (candidate.matchScore >= 90) return 'Ultra-high compatibility score';
+  if (candidate.matchScore >= 75) return 'Strong goal + XP alignment';
+  return 'Similar momentum this week';
+};
+
+export const suggestPartners = (currentUser, users = [], options = {}) => {
+  const matches = findPartners(currentUser, users, options);
+  return matches.slice(0, options.hintsLimit || 3).map((candidate) => ({
+    ...candidate,
+    reason: buildSuggestionReason(candidate)
+  }));
+};
+
 export default {
-  findPartners
+  findPartners,
+  suggestPartners
 };

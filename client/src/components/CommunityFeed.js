@@ -4,12 +4,11 @@ import CommunityPostCard from './CommunityPostCard';
 import EventsList from './EventsList';
 import '../styles/ui.css';
 
-// CommunityFeed now toggles between posts and the collaborative events timeline
+// CommunityFeed surfaces either the post stream or the event timeline based on the active page tab
 const CommunityFeed = ({
   posts,
   events,
-  activeTab,
-  onTabChange,
+  mode,
   onReact,
   onJoinEvent,
   onFindTeam,
@@ -19,28 +18,7 @@ const CommunityFeed = ({
   currentUserId
 }) => (
   <section className="community-feed" aria-live="polite">
-    <div className="community-feed__tabs" role="tablist" aria-label="Community content tabs">
-      <button
-        type="button"
-        role="tab"
-        aria-selected={activeTab === 'posts'}
-        className={activeTab === 'posts' ? 'feed-tab feed-tab--active' : 'feed-tab'}
-        onClick={() => onTabChange('posts')}
-      >
-        Posts
-      </button>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={activeTab === 'events'}
-        className={activeTab === 'events' ? 'feed-tab feed-tab--active' : 'feed-tab'}
-        onClick={() => onTabChange('events')}
-      >
-        Events
-      </button>
-    </div>
-
-    {activeTab === 'posts' && (
+    {mode === 'feed' && (
       <div role="tabpanel" aria-label="Channel posts">
         {!posts.length && (
           <div className="community-feed-empty">
@@ -53,7 +31,7 @@ const CommunityFeed = ({
       </div>
     )}
 
-    {activeTab === 'events' && (
+    {mode === 'events' && (
       <div role="tabpanel" aria-label="Events">
         <EventsList
           events={events}
@@ -72,8 +50,7 @@ const CommunityFeed = ({
 CommunityFeed.propTypes = {
   posts: PropTypes.arrayOf(PropTypes.object).isRequired,
   events: PropTypes.arrayOf(PropTypes.object).isRequired,
-  activeTab: PropTypes.oneOf(['posts', 'events']).isRequired,
-  onTabChange: PropTypes.func.isRequired,
+  mode: PropTypes.oneOf(['feed', 'events']).isRequired,
   onReact: PropTypes.func.isRequired,
   onJoinEvent: PropTypes.func.isRequired,
   onFindTeam: PropTypes.func.isRequired,

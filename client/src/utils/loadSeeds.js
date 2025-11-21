@@ -4,6 +4,7 @@ import communitySeeds from '../data/community.json';
 import jobSeeds from '../data/jobs.json';
 import userSeeds from '../data/users.json';
 import microEventSeeds from '../data/microevents.json';
+import insightsSeed from '../data/insights.json';
 import { findPartners as computePartners } from './partnerMatcher';
 
 const PUBLISHED_COURSES_KEY = 'skillversex:publishedCourses';
@@ -21,6 +22,7 @@ const TEAM_STORAGE_PREFIX = 'skillversex:teams:';
 const MICRO_EVENTS_KEY = 'skillversex:microEvents';
 const MICRO_EVENT_RSVPS_KEY = 'skillversex:microEventRsvps';
 const MICRO_EVENT_CHATS_KEY = 'skillversex:microEventChats';
+const INSIGHTS_KEY = 'skillversex:insights';
 const USER_PROFILE_KEY = 'skillversex:userProfile';
 const USER_PASSWORD_KEY = 'skillversex:userPasswordHash';
 const DOWNLOADS_KEY = 'skillversex:downloads';
@@ -311,6 +313,9 @@ const persistMicroEventChats = (map) => {
   }
 };
 
+const readInsights = () => readArrayFromStorage(INSIGHTS_KEY);
+const persistInsights = (entries) => persistJsonValue(INSIGHTS_KEY, entries);
+
 const buildTeamKey = (eventId) => `${TEAM_STORAGE_PREFIX}${eventId}`;
 
 const readTeamsForEvent = (eventId) => {
@@ -437,6 +442,19 @@ export const getPosts = () => {
 
 export const getEvents = () => composeEvents();
 export const getMicroEvents = () => composeMicroEvents();
+export const getInsightsSeed = () => deepClone(insightsSeed.insights || [], []);
+export const getInsights = () => {
+  const stored = readInsights();
+  if (stored.length) return stored;
+  const fallback = getInsightsSeed();
+  persistInsights(fallback);
+  return fallback;
+};
+export const saveInsights = (entries = []) => {
+  const normalized = Array.isArray(entries) ? entries : [];
+  persistInsights(normalized);
+  return normalized;
+};
 export const getJobs = () => {
   const localJobs = readLocalJobs();
   return [...deepClone(jobSeeds, []), ...deepClone(localJobs, [])];
@@ -577,11 +595,11 @@ export const logoutUser = async () => {
   const timestamp = new Date().toISOString();
   try {
     if (typeof fetch === 'function') {
-      await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     }
     // Server response should clear httpOnly cookies if they exist.
   } catch (error) {
-    console.info('loadSeeds: optional /api/logout not available', error);
+    console.info('loadSeeds: optional /api/auth/logout not available', error);
   }
   if (typeof window !== 'undefined') {
     SESSION_STORAGE_KEYS.forEach((key) => {
@@ -665,11 +683,14 @@ export const publishPost = (post) => {
   const normalized = {
     id: post.id || `local-post-${Date.now()}`,
     channelId: post.channelId || 'all',
+    title: post.title || '',
+    description: post.description || post.content || '',
     author: post.author || { name: 'Anonymous', avatar: '', role: '' },
     timestamp: post.timestamp || new Date().toISOString(),
     type: post.type || 'text',
-    content: post.content || '',
+    content: post.content || post.description || '',
     image: post.image || null,
+    attachment: post.attachment || null,
     poll: post.poll || null,
     tags: Array.isArray(post.tags) ? post.tags : [],
     reactions: post.reactions || { '🔥': 0, '👏': 0, '💡': 0 },
@@ -987,6 +1008,8 @@ export default {
   getCourses,
   getPosts,
   getEvents,
+  getInsights,
+  getInsightsSeed,
   getJobs,
   getLeaderboard,
   getMentors,
@@ -1014,6 +1037,7 @@ export default {
   createMicroEvent,
   getMicroEventChatLog,
   saveMicroEventChatLog,
+  saveInsights,
   getTeams,
   saveTeams,
   getUsers,

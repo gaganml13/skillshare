@@ -1,12 +1,40 @@
 // Course routes: CRUD and details
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+
 const router = express.Router();
 
 const { createCourse, getAllCourses, getCourseById, addLessonToCourse } = require('../controllers/courseController');
 const { protect } = require('../middleware/authMiddleware');
 
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+	fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+	destination: (_req, _file, cb) => cb(null, uploadsDir),
+	filename: (_req, file, cb) => {
+		const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+		const sanitized = file.originalname.replace(/\s+/g, '_');
+		cb(null, `${uniqueSuffix}-${sanitized}`);
+	}
+});
+
+const upload = multer({ storage });
+
 // Create course (any authenticated user)
-router.post('/', protect, createCourse);
+router.post(
+	'/',
+	protect,
+	upload.fields([
+		{ name: 'thumbnail', maxCount: 1 },
+		{ name: 'lessonVideos' }
+	]),
+	createCourse
+);
 // Get all courses
 router.get('/', getAllCourses);
 // Get courses for dashboard (created and enrolled)

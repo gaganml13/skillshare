@@ -37,6 +37,36 @@
       ]
     },
     {
+      "_id": "demo-community-create",
+      "title": "Community Launch Playbook",
+      "description": "Plan, record, and release a member-only course drop with access gates, teaser assets, and launch automation.",
+      "category": "Community",
+      "price": 0,
+      "duration": "3h 20m",
+      "level": "All levels",
+      "rating": 4.95,
+      "learners": 220,
+      "access": "community",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-ops", "name": "Gagan (Host)" },
+      "lessons": [
+        {
+          "title": "Experience arc",
+          "description": "Map your three-act learning journey for members.",
+          "duration": "12",
+          "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4",
+          "visibility": "enrolled"
+        },
+        {
+          "title": "Gate & release",
+          "description": "Decide between public, community, or private release windows.",
+          "duration": "18",
+          "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-10s.mp4",
+          "visibility": "enrolled"
+        }
+      ]
+    },
+    {
       "_id": "demo-extra-3",
       "title": "AI Writing Systems Lab",
       "description": "Pair AI copilots with your editorial workflow. Build reusable prompts, tone guides, and fact-check rails.",
@@ -137,11 +167,83 @@
       "rating": 4.75,
       "learners": 780,
       "access": "public",
-      "imageUrl": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+      "imageUrl": "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=1200&q=80",
       "instructor": { "_id": "inst-mira", "name": "Mira Adisa" },
       "lessons": [
         { "title": "Prompting your outline", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", "visibility": "public" },
         { "title": "Launch assets kit", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-15s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-9",
+      "title": "Creative Coding for Storytellers",
+      "description": "Prototype interactive narratives with JavaScript shaders, scroll-driven scenes, and audio-reactive moments.",
+      "category": "Programming",
+      "price": 379,
+      "duration": "6h 40m",
+      "level": "Intermediate",
+      "rating": 4.88,
+      "learners": 520,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-lucia", "name": "Lucia Prado" },
+      "lessons": [
+        { "title": "Shader sketchbook", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", "visibility": "public" },
+        { "title": "Scroll-stage choreography", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-15s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-10",
+      "title": "Brand Identity Systems Studio",
+      "description": "Develop modular design systems with tactile textures, kinetic logos, and pitch-ready case studies.",
+      "category": "Art & Design",
+      "price": 489,
+      "duration": "9h 05m",
+      "level": "Advanced",
+      "rating": 4.93,
+      "learners": 470,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-ariel", "name": "Ariel Cortez" },
+      "lessons": [
+        { "title": "Concept sprints", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-10s.mp4", "visibility": "public" },
+        { "title": "Motion-ready systems", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-15s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-11",
+      "title": "No-Code Automation Sprint",
+      "description": "Wire air-tight workflows with Airtable, Make, and AI to auto-run onboarding, reminders, and reports.",
+      "category": "Business",
+      "price": 329,
+      "duration": "4h 55m",
+      "level": "Beginner",
+      "rating": 4.7,
+      "learners": 690,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-omar", "name": "Omar Bennett" },
+      "lessons": [
+        { "title": "Blueprint your ops", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", "visibility": "public" },
+        { "title": "Automation handoff", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-15s.mp4", "visibility": "enrolled" }
+      ]
+    },
+    {
+      "_id": "demo-extra-12",
+      "title": "XR Motion Capture Studio",
+      "description": "Capture cinematic mocap performances, retarget rigs, and export ready-to-edit XR loops.",
+      "category": "Video & Film",
+      "price": 559,
+      "duration": "8h 45m",
+      "level": "Advanced",
+      "rating": 4.86,
+      "learners": 360,
+      "access": "public",
+      "imageUrl": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+      "instructor": { "_id": "inst-dev", "name": "Dev Monroe" },
+      "lessons": [
+        { "title": "Sensor stage setup", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-10s.mp4", "visibility": "public" },
+        { "title": "Retarget + polish", "videoUrl": "https://samplelib.com/lib/preview/mp4/sample-20s.mp4", "visibility": "enrolled" }
       ]
     }
   ],

@@ -119,31 +119,97 @@ exports.addLessonToCourse = async (req, res) => {
   }
 };
 
-// Create a new course (no role check, just auth)
+// Create a new course using uploaded thumbnail + lesson files
 exports.createCourse = async (req, res) => {
   try {
-    const { title, description, category, price, access, lessons } = req.body;
-    const instructor = req.user._id;
-    const course = new Course({
+    const {
       title,
       description,
       category,
       price,
-      access: access || 'public',
-      lessons,
-      instructor
+      access = 'public',
+      level = 'All levels',
+      courseDuration,
+      tags,
+      lessons: lessonsPayload
+    } = req.body;
+
+    if (!title || !description || !category) {
+      return res.status(400).json({ message: 'Title, description, and category are required.' });
+    }
+
+    const parseLessons = () => {
+      if (!lessonsPayload) return [];
+      if (Array.isArray(lessonsPayload)) return lessonsPayload;
+      try {
+        return JSON.parse(lessonsPayload);
+      } catch (error) {
+        console.info('createCourse: unable to parse lessons payload', error);
+        return [];
+      }
+    };
+
+    const normalizedAccess = ['public', 'community', 'private'].includes(access) ? access : 'public';
+    const lessonFiles = Array.isArray(req.files?.lessonVideos) ? req.files.lessonVideos : [];
+    const parsedLessons = parseLessons();
+
+    const normalizedLessons = parsedLessons
+      .map((lesson, index) => {
+        const file = lessonFiles[index];
+        const filePath = file ? `/uploads/${file.filename}` : lesson.videoUrl;
+        const lessonTitle = (lesson?.title || '').trim();
+        if (!lessonTitle || !filePath) return null;
+        return {
+          title: lessonTitle,
+          description: (lesson?.description || '').trim(),
+          duration: lesson?.duration || '10 min',
+          order: index,
+          videoUrl: filePath,
+          visibility: ['public', 'enrolled', 'group'].includes(lesson?.visibility) ? lesson.visibility : 'enrolled'
+        };
+      })
+      .filter(Boolean);
+
+    if (normalizedLessons.length === 0) {
+      return res.status(400).json({ message: 'Add at least one lesson with a video.' });
+    }
+
+    const thumbnailFile = req.files?.thumbnail?.[0];
+    const thumbnailUrl = thumbnailFile ? `/uploads/${thumbnailFile.filename}` : (req.body.thumbnailUrl || '');
+
+    const normalizedTags = Array.isArray(tags)
+      ? tags
+      : (typeof tags === 'string'
+        ? tags.split(',').map((tag) => tag.trim()).filter(Boolean)
+        : []);
+
+    const totalDuration = courseDuration || `${Math.max(normalizedLessons.length * 10, 10)} min`;
+
+    const course = await Course.create({
+      title: title.trim(),
+      description: description.trim(),
+      category: category.trim(),
+      level: level || 'All levels',
+      thumbnailUrl,
+      duration: totalDuration,
+      price: Number(price) || 0,
+      access: normalizedAccess,
+      lessons: normalizedLessons,
+      tags: normalizedTags,
+      instructor: req.user._id
     });
-    await course.save();
+
     res.status(201).json(course);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    console.error('createCourse error', err);
+    res.status(400).json({ message: err.message || 'Unable to create course' });
   }
 };
 
-// Get all public courses
+// Get all public/community courses
 exports.getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find({ access: 'public' })
+    const courses = await Course.find({ access: { $in: ['public', 'community'] } })
       .populate('instructor', 'name')
       .select('-__v');
     res.json(courses);

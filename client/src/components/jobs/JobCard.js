@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// JobCard leans on the shared card + button styles so it stays consistent across themes.
+
 const STATUS_COPY = {
   Applied: 'Applied · recruiter reviewing',
   Interviewing: 'Interviewing · keep preparing',
@@ -18,7 +20,7 @@ const JobCard = ({
   const statusLabel = applicationStatus ? (STATUS_COPY[applicationStatus] || applicationStatus) : null;
 
   return (
-    <article className="job-card">
+    <article className="card job-card">
       <header className="job-card__header">
         <div className="job-card__company">
           {job.logo ? (
@@ -71,12 +73,12 @@ const JobCard = ({
       <footer className="job-card__footer">
         <button
           type="button"
-          className={`ghost-btn ${isSaved ? 'is-active' : ''}`}
+          className={`btn btn--ghost ${isSaved ? 'is-active' : ''}`.trim()}
           onClick={() => onToggleSave(job.id)}
         >
           {isSaved ? 'Saved' : 'Save for later'}
         </button>
-        <button type="button" className="primary-btn" onClick={() => onQuickApply(job)}>
+        <button type="button" className="btn btn--primary" onClick={() => onQuickApply(job)}>
           Quick apply
         </button>
       </footer>

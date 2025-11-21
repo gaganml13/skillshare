@@ -34,6 +34,8 @@ const TeamBuilder = ({ event }) => {
   const [statusMessage, setStatusMessage] = useState('');
   const [customRoleName, setCustomRoleName] = useState('');
   const [customRoleCount, setCustomRoleCount] = useState(1);
+  // Keep roles stable across renders so chips animate smoothly.
+  const roleEntries = useMemo(() => Object.entries(roleSpec), [roleSpec]);
 
   const defaultRoleSpec = useMemo(() => {
     const roles = event?.roles || event?.roleTemplate || [];
@@ -180,103 +182,124 @@ const TeamBuilder = ({ event }) => {
   if (!event) {
     return (
       <section className="team-builder">
-        <p>Select an event to start building teams.</p>
+        <div className="card team-builder__surface">
+          <p>Select an event to start building teams.</p>
+        </div>
       </section>
     );
   }
 
   return (
     <section className="team-builder" aria-label="Auto-create teams">
-      <header className="team-builder__header">
-        <div>
-          <p className="team-builder__eyebrow">Auto-create teams</p>
-          <h3>{event.title}</h3>
-          <p>Balance roles and XP in one click. Hosts can tweak slots before locking teams.</p>
-        </div>
-        <div className="team-builder__meta">
-          <p>{participants.length} participants</p>
-          <p>Seed: {seedUsed}</p>
-        </div>
-      </header>
-
-      <form className="team-builder__form" aria-label="Team inputs" onSubmit={(e) => e.preventDefault()}>
-        <label>
-          <span>Desired team size</span>
-          <input
-            type="number"
-            min="2"
-            value={teamSize}
-            onChange={(e) => setTeamSize(Math.max(2, Number(e.target.value) || 2))}
-          />
-        </label>
-
-        <fieldset>
-          <legend>Role distribution</legend>
-          <div className="team-builder__roles">
-            {Object.keys(roleSpec).map((roleKey) => (
-              <label key={roleKey}>
-                <span>{roleKey}</span>
-                <input
-                  type="number"
-                  min="0"
-                  value={roleSpec[roleKey]}
-                  onChange={(e) => handleRoleCountChange(roleKey, e.target.value)}
-                />
-              </label>
-            ))}
+      <div className="card team-builder__surface">
+        <header className="team-builder__header">
+          <div>
+            <p className="team-builder__eyebrow">Auto-create teams</p>
+            <h3>{event.title}</h3>
+            <p>Balance roles and XP in one click. Hosts can tweak slots before locking teams.</p>
           </div>
-          <div className="team-builder__add-role">
-            <input
-              type="text"
-              placeholder="Role name"
-              value={customRoleName}
-              onChange={(e) => setCustomRoleName(e.target.value)}
-              aria-label="Custom role name"
-            />
+          <div className="team-builder__meta">
+            <p>{participants.length} participants</p>
+            <p>Seed {seedUsed}</p>
+          </div>
+        </header>
+
+        <form className="team-builder__form form-grid" aria-label="Team inputs" onSubmit={(e) => e.preventDefault()}>
+          <label className="col-4">
+            <span>Desired team size</span>
             <input
               type="number"
-              min="1"
-              value={customRoleCount}
-              onChange={(e) => setCustomRoleCount(Math.max(1, Number(e.target.value) || 1))}
-              aria-label="Custom role count"
+              min="2"
+              value={teamSize}
+              onChange={(e) => setTeamSize(Math.max(2, Number(e.target.value) || 2))}
             />
-            <button type="button" className="ghost-btn" onClick={handleAddRole} aria-label="Add role">
-              Add role
+          </label>
+
+          <label className="col-4">
+            <span>Minimum experience</span>
+            <select value={minExperience} onChange={(e) => setMinExperience(e.target.value)}>
+              {LEVEL_ORDER.map((level) => (
+                <option key={level} value={level}>
+                  {level === 'any' ? 'Any level' : level}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <fieldset className="team-builder__fieldset col-12">
+            <legend>Role distribution</legend>
+            <div className="team-builder__roles-track" aria-live="polite">
+              {roleEntries.length ? (
+                roleEntries.map(([roleKey, count]) => (
+                  <span key={roleKey} className="chip">
+                    {roleKey}
+                    <span aria-hidden="true"> · {count}</span>
+                  </span>
+                ))
+              ) : (
+                <span className="team-builder__roles-empty">Add a role to get started</span>
+              )}
+            </div>
+            <div className="team-builder__roles-grid">
+              {roleEntries.map(([roleKey]) => (
+                <label key={roleKey}>
+                  <span>{roleKey}</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={roleSpec[roleKey]}
+                    onChange={(e) => handleRoleCountChange(roleKey, e.target.value)}
+                  />
+                </label>
+              ))}
+            </div>
+            <div className="team-builder__add-role">
+              <input
+                type="text"
+                placeholder="Role name"
+                value={customRoleName}
+                onChange={(e) => setCustomRoleName(e.target.value)}
+                aria-label="Custom role name"
+              />
+              <input
+                type="number"
+                min="1"
+                value={customRoleCount}
+                onChange={(e) => setCustomRoleCount(Math.max(1, Number(e.target.value) || 1))}
+                aria-label="Custom role count"
+              />
+              <button type="button" className="ghost-btn" onClick={handleAddRole} aria-label="Add role">
+                Add role
+              </button>
+            </div>
+          </fieldset>
+
+          <div className="team-builder__actions col-12">
+            <button type="button" className="primary-btn" onClick={() => handleAutoGroup()} disabled={isGenerating}>
+              {isGenerating ? 'Grouping…' : 'Auto-group'}
+            </button>
+            <button type="button" className="ghost-btn" onClick={handleShuffle}>
+              Shuffle seed
             </button>
           </div>
-        </fieldset>
+        </form>
 
-        <label>
-          <span>Minimum experience</span>
-          <select value={minExperience} onChange={(e) => setMinExperience(e.target.value)}>
-            {LEVEL_ORDER.map((level) => (
-              <option key={level} value={level}>
-                {level === 'any' ? 'Any level' : level}
-              </option>
-            ))}
-          </select>
-        </label>
+        {statusMessage && <p className="team-builder__status" role="status">{statusMessage}</p>}
 
-        <button type="button" className="primary-btn" onClick={() => handleAutoGroup()} disabled={isGenerating}>
-          {isGenerating ? 'Grouping…' : 'Auto-group'}
-        </button>
-      </form>
+        {!!draftTeams.length && renderTeams(draftTeams, 'Suggested pods')}
+        {!!confirmedTeams.length && renderTeams(confirmedTeams, 'Confirmed pods')}
 
-      {statusMessage && <p className="team-builder__status" role="status">{statusMessage}</p>}
-
-      {!!draftTeams.length && renderTeams(draftTeams, 'Suggested pods')}
-      {!!confirmedTeams.length && renderTeams(confirmedTeams, 'Confirmed pods')}
-
-      {unassigned.length > 0 && (
-        <div className="team-builder__unassigned">
-          <p>Unassigned ({unassigned.length})</p>
-          <div className="team-builder__chips">
-            {unassigned.map((participant) => (
-              <span key={participant.id}>{participant.name}</span>
-            ))}
+        {unassigned.length > 0 && (
+          <div className="team-builder__unassigned">
+            <p>Unassigned ({unassigned.length})</p>
+            <div className="team-builder__chips">
+              {unassigned.map((participant) => (
+                <span key={participant.id}>{participant.name}</span>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </section>
   );
 };

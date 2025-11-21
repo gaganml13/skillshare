@@ -24,12 +24,13 @@ const formatTimeAgo = (timestamp) => {
 const CommunityPostCard = ({ post, onReact }) => {
   const [expanded, setExpanded] = useState(false);
   const [bookmarked, setBookmarked] = useState(Boolean(post.bookmarked));
+  const bodyText = post.description || post.content || '';
 
-  const shouldTruncate = post.content.length > 220;
+  const shouldTruncate = bodyText.length > 220;
   const displayText = useMemo(() => {
-    if (!shouldTruncate || expanded) return post.content;
-    return `${post.content.slice(0, 220)}…`;
-  }, [expanded, post.content, shouldTruncate]);
+    if (!shouldTruncate || expanded) return bodyText;
+    return `${bodyText.slice(0, 220)}…`;
+  }, [expanded, bodyText, shouldTruncate]);
 
   const handleToggleBookmark = () => {
     setBookmarked((prev) => !prev);
@@ -58,6 +59,7 @@ const CommunityPostCard = ({ post, onReact }) => {
         </button>
       </header>
 
+      {post.title && <h3 className="community-post-title">{post.title}</h3>}
       <p className="community-post-body">{displayText}</p>
       {shouldTruncate && (
         <button type="button" className="community-post-read-more" onClick={() => setExpanded((prev) => !prev)}>
@@ -68,6 +70,12 @@ const CommunityPostCard = ({ post, onReact }) => {
       {post.image && (
         <div className="community-post-image">
           <img src={post.image} alt="Post attachment" loading="lazy" />
+        </div>
+      )}
+
+      {post.attachment && post.attachment.type === 'file' && (
+        <div className="community-post-attachment">
+          <span>📎 {post.attachment.name || 'Attachment'}</span>
         </div>
       )}
 

@@ -1,7 +1,14 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import PartnerCard from './PartnerCard';
-import { findPartners } from '../utils/partnerMatcher';
+import { findPartners, suggestPartners } from '../utils/partnerMatcher';
+
+// Helper ensures we never call .join on an unsafe value
+const safeJoin = (value, separator = ', ') => {
+  if (Array.isArray(value)) return value.join(separator);
+  if (typeof value === 'string') return value;
+  return '';
+};
 
 const splitAvailability = (value = '') =>
   value
@@ -11,10 +18,11 @@ const splitAvailability = (value = '') =>
 
 // PartnerMatcher renders inputs + results grid backed by findPartners heuristic
 const PartnerMatcher = ({ currentUser, users, minMatch, onConnect }) => {
-  const [goalInput, setGoalInput] = useState(currentUser?.goals?.join('; ') || 'Ship weekly demo');
-  const [availabilityInput, setAvailabilityInput] = useState((currentUser?.availability || []).join('\n'));
+  const [goalInput, setGoalInput] = useState(safeJoin(currentUser?.goals, '; ') || 'Ship weekly demo');
+  const [availabilityInput, setAvailabilityInput] = useState(safeJoin(currentUser?.availability, '\n'));
   const [experience, setExperience] = useState(currentUser?.experience || 'intermediate');
   const [preferSameZone, setPreferSameZone] = useState(false);
+  const [aiSuggestions, setAiSuggestions] = useState([]);
 
   const viewerProfile = useMemo(() => ({
     ...currentUser,
@@ -28,6 +36,14 @@ const PartnerMatcher = ({ currentUser, users, minMatch, onConnect }) => {
       preferSameZone,
       minMatchPct: minMatch
     });
+  }, [viewerProfile, users, preferSameZone, minMatch]);
+
+  useEffect(() => {
+    const hints = suggestPartners(viewerProfile, users, {
+      preferSameZone,
+      minMatchPct: Math.max(minMatch, 40)
+    });
+    setAiSuggestions(hints);
   }, [viewerProfile, users, preferSameZone, minMatch]);
 
   return (
@@ -66,6 +82,26 @@ const PartnerMatcher = ({ currentUser, users, minMatch, onConnect }) => {
           <span>Prefer same time zone</span>
         </label>
       </form>
+
+      <section className="partner-matcher__insights" aria-live="polite">
+        <h3>AI nudges</h3>
+        <p className="muted">Most compatible partners based on goals, timezone, and energy.</p>
+        <ul>
+          {aiSuggestions.map((suggestion) => (
+            <li key={suggestion.id}>
+              <button
+                type="button"
+                className="link-btn"
+                onClick={() => onConnect(suggestion)}
+              >
+                {suggestion.name}
+              </button>
+              <span>{suggestion.reason}</span>
+            </li>
+          ))}
+          {!aiSuggestions.length && <li>No AI suggestions yet. Adjust filters to refresh.</li>}
+        </ul>
+      </section>
 
       <div className="partner-grid" role="list">
         {partners.length === 0 && <p role="status">No partners match those filters yet.</p>}

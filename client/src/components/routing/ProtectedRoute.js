@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import Navbar from '../Navbar';
 
 /**
  * ProtectedRoute component
@@ -19,8 +20,13 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // If authenticated, render protected children
-  return children;
+  // If authenticated, render protected children with the global navbar
+  return (
+    <>
+      <Navbar />
+      {children}
+    </>
+  );
 };
 
 export default ProtectedRoute;

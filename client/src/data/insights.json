@@ -1,0 +1,31 @@
+{
+  "insights": [
+    {
+      "id": "insight-genai",
+      "title": "GenAI product studios are hiring pods",
+      "stat": "24 briefs",
+      "trend": "+12% week",
+      "description": "Studios are spinning up micro-squads for 6-week prototype sprints. Demand is highest for React, Typescript, and UX copywriters who can pair with LLM chains.",
+      "tags": ["React", "LLM", "Prototype"],
+      "cta": "See open studios"
+    },
+    {
+      "id": "insight-apac",
+      "title": "APAC remote companies now accept async demos",
+      "stat": "9 cohorts",
+      "trend": "New",
+      "description": "Singapore and Sydney based partners are trialing async demo reviews which unlocks fewer timezone collisions for US contributors.",
+      "tags": ["Async", "Remote", "APAC"],
+      "cta": "Review playbook"
+    },
+    {
+      "id": "insight-referrals",
+      "title": "Referral hires close 2x faster",
+      "stat": "42%",
+      "trend": "+5% MoM",
+      "description": "Teams are leaning on Skillverse referrals with lightweight video intros. Send a 60-second loom to stand out.",
+      "tags": ["Referrals", "Video", "Growth"],
+      "cta": "Draft intro"
+    }
+  ]
+}

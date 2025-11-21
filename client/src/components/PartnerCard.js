@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { saveMatches } from '../utils/loadSeeds';
 
-// PartnerCard highlights candidate snapshot plus connection CTA
+// PartnerCard highlights matches with the shared card surface for consistent theming.
 const PartnerCard = ({ partner, onConnect }) => {
   if (!partner) return null;
 
@@ -13,7 +13,7 @@ const PartnerCard = ({ partner, onConnect }) => {
   };
 
   return (
-    <article className="partner-card" aria-label={`Match ${partner.name}`}>
+    <article className="card partner-card" aria-label={`Match ${partner.name}`}>
       <header className="partner-card__header">
         <img src={partner.avatar} alt={partner.name} className="partner-card__avatar" />
         <div>
@@ -35,7 +35,7 @@ const PartnerCard = ({ partner, onConnect }) => {
       </div>
 
       <footer className="partner-card__footer">
-        <button type="button" className="primary-btn" onClick={handleConnect} aria-label={`Connect with ${partner.name}`}>
+        <button type="button" className="btn btn--primary" onClick={handleConnect} aria-label={`Connect with ${partner.name}`}>
           Connect
         </button>
       </footer>

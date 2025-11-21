@@ -1,9 +1,10 @@
 // CoursesPage.js - Displays all available courses
 import React, { useState, useEffect, useContext, useMemo } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { SAMPLE_COURSES, isSampleEnrolled } from '../utils/sampleCourses';
+import { isSampleEnrolled } from '../utils/sampleCourses';
+import { getStoredCourses } from '../utils/dataStore';
 import HeaderHero from '../components/HeaderHero';
 import FilterPills from '../components/FilterPills';
 import CourseGrid from '../components/CourseGrid';
@@ -58,33 +59,22 @@ const Select = styled.select`
 `;
 
 const CoursesPage = () => {
-  const [courses, setCourses] = useState([]);
-  const [error, setError] = useState('');
+  const [courses, setCourses] = useState(() => getStoredCourses());
   const [usingSampleData, setUsingSampleData] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const res = await axios.get('/api/courses');
-        const fetched = Array.isArray(res.data) ? res.data : [];
-        if (fetched.length === 0) {
-          setCourses(SAMPLE_COURSES);
-          setUsingSampleData(true);
-        } else {
-          setCourses(fetched);
-          setUsingSampleData(false);
-        }
-        setError('');
-      } catch (err) {
-        setCourses(SAMPLE_COURSES);
-        setUsingSampleData(true);
-        setError('');
-      }
+    const refresh = () => {
+      const nextCourses = getStoredCourses();
+      setCourses(nextCourses);
+      setUsingSampleData(nextCourses.length === 0);
     };
-    fetchCourses();
+    refresh();
+    if (typeof window === 'undefined') return () => {};
+    window.addEventListener('courses:updated', refresh);
+    return () => window.removeEventListener('courses:updated', refresh);
   }, []);
 
   const filteredCourses = useMemo(() => {
@@ -126,7 +116,7 @@ const CoursesPage = () => {
           description="Discover cinematic lessons, async cohorts, and interactive workshops built by top creators."
           actions={[
             { label: 'Sort by newest', to: '/courses' },
-            { label: 'Request mentorship', to: '/mentorship', variant: 'ghost' }
+            { label: 'Create course', to: '/courses/create' }
           ]}
           stats={[
             { label: 'Courses live', value: `${Math.max(courses.length, 24)}` },
@@ -150,17 +140,24 @@ const CoursesPage = () => {
               ))}
             </Select>
           </InputsRow>
-          <FilterPills
-            options={distinctCategories.map((option) => ({ label: option === 'all' ? 'All' : option, value: option }))}
-            active={selectedCategory}
-            onChange={setSelectedCategory}
-          />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <FilterPills
+              options={distinctCategories.map((option) => ({ label: option === 'all' ? 'All' : option, value: option }))}
+              active={selectedCategory}
+              onChange={setSelectedCategory}
+            />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <span style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
+                {filteredCourses.length} courses · refreshed each publish
+              </span>
+              <Link className="btn btn--primary" to="/courses/create">Create course</Link>
+            </div>
+          </div>
           {usingSampleData && (
             <span style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
               Showing interactive sample content while we fetch live courses.
             </span>
           )}
-          {error && <span style={{ color: 'red' }}>{error}</span>}
         </FilterPanel>
         <CourseGrid
           title="All courses"
@@ -181,9 +178,8 @@ export default CoursesPage;
 
 /*
 Code Description:
-- useState: Holds courses array and error message.
-- useEffect: Fetches courses from backend API on initial render.
-- axios: Used for GET request to /api/courses.
-- CourseCard: Renders each course with its details.
-- Layout: Responsive flexbox grid for course cards.
+- useState: Tracks catalog filters and locally stored courses.
+- useEffect: Listens for custom "courses:updated" events to refresh UI instantly.
+- getStoredCourses: Reads merged seed/localStorage collection without hitting the API.
+- CourseGrid: Renders responsive cards that inherit the shared design tokens.
 */

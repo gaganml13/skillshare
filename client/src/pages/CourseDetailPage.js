@@ -1,20 +1,17 @@
-
-
 import React, { useEffect, useState, useContext, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import AddLessonForm from '../components/courses/AddLessonForm';
 import CourseTabs from '../components/courses/CourseTabs';
 import AiAssistantTab from '../components/courses/AiAssistantTab';
 import CourseProgressBar from '../components/courses/CourseProgressBar';
-import QnaTab from '../components/courses/QnaTab';
 import {
   getSampleCourseById,
   isSampleCourseId,
   isSampleEnrolled,
   storeSampleEnrollment
 } from '../utils/sampleCourses';
+import { getCourseById, appendQuestion, toggleDeliverable } from '../utils/dataStore';
 import styled from 'styled-components';
 
 const DownloadButton = styled.button`
@@ -50,57 +47,49 @@ const CourseDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('Overview');
-  const [discussions, setDiscussions] = useState([]);
+  const [questionText, setQuestionText] = useState('');
+  const [questionStatus, setQuestionStatus] = useState('');
   const [isSampleCourse, setIsSampleCourse] = useState(false);
   const { user } = useContext(AuthContext);
-
-  const fetchCourse = async () => {
-    try {
-      setLoading(true);
-      if (isSampleCourseId(id)) {
-        const sampleCourse = getSampleCourseById(id);
-        if (sampleCourse) {
-          setCourse(sampleCourse);
-          setDiscussions(sampleCourse.discussions || []);
-          setIsSampleCourse(true);
-          setError(null);
-          if (!isSampleEnrolled(id)) {
-            storeSampleEnrollment(id);
-          }
-          return;
-        }
-      }
-      const res = await axios.get(`/api/courses/${id}`);
-      setCourse(res.data);
-      setDiscussions(res.data.discussions || []);
+  const fetchCourse = () => {
+    setLoading(true);
+    const storedCourse = getCourseById(id);
+    if (storedCourse) {
+      setCourse(storedCourse);
       setIsSampleCourse(false);
       setError(null);
-    } catch (err) {
-      const fallback = getSampleCourseById(id);
-      if (fallback) {
-        setCourse(fallback);
-        setDiscussions(fallback.discussions || []);
-        setIsSampleCourse(true);
-        setError(null);
-        if (!isSampleEnrolled(id)) {
-          storeSampleEnrollment(id);
-        }
-      } else {
-        setError('Failed to load course details.');
-      }
-    } finally {
       setLoading(false);
+      return;
     }
+    const fallback = getSampleCourseById(id);
+    if (fallback) {
+      setCourse(fallback);
+      setIsSampleCourse(true);
+      setError(null);
+      if (!isSampleEnrolled(id)) {
+        storeSampleEnrollment(id);
+      }
+    } else {
+      setError('Failed to load course details.');
+    }
+    setLoading(false);
   };
+
   useEffect(() => {
     fetchCourse();
-    // eslint-disable-next-line
+    if (typeof window === 'undefined') return () => {};
+    window.addEventListener('courses:updated', fetchCourse);
+    return () => window.removeEventListener('courses:updated', fetchCourse);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const computedUserId = useMemo(() => user?._id || user?.id, [user]);
   const courseHasLessons = course?.lessons && course.lessons.length > 0;
   const firstLesson = courseHasLessons ? course.lessons[0] : null;
   const totalLessons = courseHasLessons ? course.lessons.length : 0;
+  const assignments = course?.assignments || [];
+  const qaThreads = course?.qa || [];
+  const finalProject = course?.finalProject || null;
   const completedLessonsRaw = course?.progress?.completedLessons ?? course?.progress?.completedLessonsCount ?? 0;
   const completedLessons = Array.isArray(completedLessonsRaw)
     ? completedLessonsRaw.length
@@ -148,6 +137,35 @@ const CourseDetailPage = () => {
   };
 
   const firstLessonUnlocked = canAccessLesson(firstLesson);
+
+  const handleQuestionSubmit = (event) => {
+    event.preventDefault();
+    if (!questionText.trim()) {
+      setQuestionStatus('Add a question before posting.');
+      return;
+    }
+    if (!course || isSampleCourse) {
+      setQuestionStatus('Questions are available on published courses only.');
+      return;
+    }
+    const posted = appendQuestion(course._id || course.id, {
+      question: questionText,
+      author: user?.name || 'You'
+    });
+    if (posted) {
+      setQuestionText('');
+      setQuestionStatus('Question posted for the cohort.');
+      fetchCourse();
+    } else {
+      setQuestionStatus('Unable to store the question right now.');
+    }
+  };
+
+  const handleDeliverableToggle = (deliverableId) => {
+    if (!course || isSampleCourse) return;
+    toggleDeliverable(course._id || course.id, deliverableId);
+    fetchCourse();
+  };
 
   if (loading) return <div style={{ textAlign: 'center', marginTop: 80 }}>Loading...</div>;
   if (error) return <div style={{ color: 'red', textAlign: 'center', marginTop: 80 }}>{error}</div>;
@@ -258,24 +276,69 @@ const CourseDetailPage = () => {
                 {activeTab === 'Assignments' && (
                   <div style={{ marginTop: 24 }}>
                     <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>Assignments</h2>
-                    {canTrackProgress ? (
-                      <p style={{ color: '#475569' }}>Track your homework and practice tasks here. Assignment workflows are coming soon.</p>
+                    {assignments.length ? (
+                      <div className="assignment-grid">
+                        {assignments.map((assignment) => (
+                          <article key={assignment.id} className="assignment-card">
+                            <header>
+                              <p className="muted">Due {assignment.due || 'TBD'}</p>
+                              <span className={`status-pill status-pill--${assignment.status || 'pending'}`}>
+                                {assignment.status || 'pending'}
+                              </span>
+                            </header>
+                            <h3>{assignment.title}</h3>
+                            <p>{assignment.description}</p>
+                          </article>
+                        ))}
+                      </div>
                     ) : (
-                      <p style={{ color: '#94a3b8' }}>Enroll to unlock guided assignments and project briefs.</p>
+                      <p style={{ color: '#94a3b8' }}>Publish a course to unlock guided assignments.</p>
                     )}
                   </div>
                 )}
 
                 {activeTab === 'Q&A' && (
                   <div style={{ marginTop: 24 }}>
-                    {canTrackProgress ? (
-                      <QnaTab courseId={course._id} discussions={discussions} refreshDiscussions={fetchCourse} />
-                    ) : (
-                      <div>
-                        <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>Questions & Answers</h2>
-                        <p style={{ color: '#94a3b8' }}>Enroll to participate in the course community and ask questions.</p>
-                      </div>
-                    )}
+                    <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>Questions & Answers</h2>
+                    <form className="qa-form" onSubmit={handleQuestionSubmit}>
+                      <textarea
+                        rows={3}
+                        value={questionText}
+                        placeholder={isSampleCourse ? 'Publish your course to unlock Q&A.' : 'Ask the cohort anything about this lesson.'}
+                        onChange={(event) => setQuestionText(event.target.value)}
+                        disabled={isSampleCourse}
+                      />
+                      <button type="submit" className="btn btn--primary" disabled={isSampleCourse}>
+                        Post question
+                      </button>
+                    </form>
+                    {questionStatus && <p className="muted">{questionStatus}</p>}
+                    <div className="qa-thread-list">
+                      {qaThreads.length ? (
+                        qaThreads.map((thread) => (
+                          <article key={thread.id} className="qa-thread">
+                            <header>
+                              <strong>{thread.author || 'Learner'}</strong>
+                              <span>{new Date(thread.timestamp || Date.now()).toLocaleDateString()}</span>
+                            </header>
+                            <p>{thread.question}</p>
+                            <div className="qa-thread__answers">
+                              {thread.answers?.length ? (
+                                thread.answers.map((answer) => (
+                                  <p key={answer.id}>
+                                    <span>{answer.author || 'Instructor'}:</span> {answer.message}
+                                  </p>
+                                ))
+                              ) : (
+                                <p className="muted">Answer coming soon.</p>
+                              )}
+                            </div>
+                          </article>
+                        ))
+                      ) : (
+                        <p className="muted">No questions yet. Start the conversation above.</p>
+                      )}
+                    </div>
                   </div>
                 )}
 
@@ -289,10 +352,27 @@ const CourseDetailPage = () => {
                 {activeTab === 'Final Project' && (
                   <div style={{ marginTop: 24 }}>
                     <h2 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 12 }}>Final Project</h2>
-                    {canTrackProgress ? (
-                      <p style={{ color: '#475569' }}>Apply everything you learn by building a showcase project. Project templates and submission guidelines will appear here.</p>
+                    {finalProject ? (
+                      <div className="final-project">
+                        <p>{finalProject.summary}</p>
+                        <ul>
+                          {finalProject.deliverables?.map((item) => (
+                            <li key={item.id}>
+                              <label>
+                                <input
+                                  type="checkbox"
+                                  checked={item.status === 'done'}
+                                  onChange={() => handleDeliverableToggle(item.id)}
+                                  disabled={isSampleCourse}
+                                />
+                                <span>{item.label}</span>
+                              </label>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ) : (
-                      <p style={{ color: '#94a3b8' }}>Enroll to view the final project brief and submission steps.</p>
+                      <p style={{ color: '#94a3b8' }}>Add a brief so learners know how to apply the material.</p>
                     )}
                   </div>
                 )}

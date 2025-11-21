@@ -5,10 +5,11 @@ import '../styles/ui.css';
 
 const baseState = {
   channelId: 'all',
-  body: '',
+  title: '',
+  description: '',
   tags: [],
   tagInput: '',
-  imagePreview: '',
+  attachment: null,
   pollEnabled: false,
   pollQuestion: '',
   pollOptions: ['', '', '']
@@ -40,21 +41,16 @@ const PostComposer = ({ channels, defaultChannelId, onPostCreated }) => {
     setState((prev) => ({ ...prev, tags: prev.tags.filter((entry) => entry !== tag) }));
   };
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      handleChange('imagePreview', reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
+  const hasContent = state.description.trim().length > 0 || Boolean(state.attachment);
   const canSubmit = () => {
     if (state.pollEnabled) {
-      return state.pollQuestion.trim().length > 3 && state.pollOptions.some((option) => option.trim().length > 0);
+      return (
+        state.title.trim().length > 3 &&
+        state.pollQuestion.trim().length > 3 &&
+        state.pollOptions.some((option) => option.trim().length > 0)
+      );
     }
-    return state.body.trim().length > 0 || Boolean(state.imagePreview);
+    return state.title.trim().length > 3 && hasContent;
   };
 
   const resetForm = () => {
@@ -66,11 +62,22 @@ const PostComposer = ({ channels, defaultChannelId, onPostCreated }) => {
     if (!canSubmit() || submitting) return;
     setSubmitting(true);
 
+    const attachmentPayload = state.attachment
+      ? {
+          type: state.attachment.type,
+          name: state.attachment.name,
+          preview: state.attachment.preview || null
+        }
+      : null;
+
     const postPayload = {
       channelId: state.channelId,
-      content: state.body.trim(),
-      type: state.pollEnabled ? 'poll' : state.imagePreview ? 'image' : 'text',
-      image: state.imagePreview || null,
+      title: state.title.trim(),
+      description: state.description.trim(),
+      content: state.description.trim(),
+      type: state.pollEnabled ? 'poll' : attachmentPayload?.type === 'image' ? 'image' : 'text',
+      image: attachmentPayload?.type === 'image' ? attachmentPayload.preview : null,
+      attachment: attachmentPayload,
       poll: state.pollEnabled
         ? {
             question: state.pollQuestion.trim(),
@@ -105,14 +112,39 @@ const PostComposer = ({ channels, defaultChannelId, onPostCreated }) => {
     });
   };
 
+  const handleFileUpload = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setState((prev) => ({
+          ...prev,
+          attachment: { type: 'image', preview: reader.result, name: file.name }
+        }));
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+    setState((prev) => ({
+      ...prev,
+      attachment: { type: 'file', name: file.name }
+    }));
+  };
+
+  const removeAttachment = () => {
+    setState((prev) => ({ ...prev, attachment: null }));
+  };
+
   return (
-    <section className="post-composer" id="composer" aria-label="Create a community post">
-      <form onSubmit={handleSubmit}>
-        <div className="composer-top">
+    <section className="community-composer" id="composer" aria-label="Create a community post">
+      <form className="composer-grid" onSubmit={handleSubmit}>
+        <label className="form-field">
+          <span>Channel</span>
           <select
             value={state.channelId}
             onChange={(event) => handleChange('channelId', event.target.value)}
-            className="composer-channel"
+            className="composer-select"
             aria-label="Select channel"
           >
             {channels.map((channel) => (
@@ -121,62 +153,79 @@ const PostComposer = ({ channels, defaultChannelId, onPostCreated }) => {
               </option>
             ))}
           </select>
-          <div className="composer-tags">
-            {state.tags.map((tag) => (
-              <button
-                key={tag}
-                type="button"
-                className="composer-tag"
-                onClick={() => handleRemoveTag(tag)}
-                aria-label={`Remove tag ${tag}`}
-              >
-                #{tag}
-                <span aria-hidden="true">×</span>
-              </button>
-            ))}
-            <input
-              type="text"
-              placeholder="Add tags"
-              value={state.tagInput}
-              onChange={(event) => {
-                const value = event.target.value;
-                if (value.includes(',')) {
-                  commitTag(value);
-                } else {
-                  setState((prev) => ({ ...prev, tagInput: value }));
-                }
-              }}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault();
-                  commitTag(state.tagInput);
-                }
-              }}
-              className="composer-tag-input"
-            />
-          </div>
+        </label>
+
+        <div className="composer-tags" aria-label="Selected tags">
+          {state.tags.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              className="chip chip--accent"
+              onClick={() => handleRemoveTag(tag)}
+              aria-label={`Remove tag ${tag}`}
+            >
+              #{tag}
+            </button>
+          ))}
+          <input
+            type="text"
+            placeholder="Add tags"
+            value={state.tagInput}
+            onChange={(event) => {
+              const value = event.target.value;
+              if (value.includes(',')) {
+                commitTag(value);
+              } else {
+                setState((prev) => ({ ...prev, tagInput: value }));
+              }
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                commitTag(state.tagInput);
+              }
+            }}
+            className="composer-tag-input"
+          />
         </div>
 
-        <textarea
-          value={state.body}
-          onChange={(event) => handleChange('body', event.target.value)}
-          placeholder="Share a win, ask for feedback, or drop a question."
-          rows={4}
-          className="composer-textarea"
-        />
+        <label className="form-field">
+          <span>Post title</span>
+          <input
+            type="text"
+            value={state.title}
+            onChange={(event) => handleChange('title', event.target.value)}
+            placeholder="e.g. Async cohort retros"
+            required
+          />
+        </label>
 
-        {state.imagePreview && (
-          <div className="composer-image-preview">
-            <img src={state.imagePreview} alt="Attachment preview" />
-            <button type="button" onClick={() => handleChange('imagePreview', '')}>
-              Remove image
+        <label className="form-field">
+          <span>Description</span>
+          <textarea
+            value={state.description}
+            onChange={(event) => handleChange('description', event.target.value)}
+            placeholder="Share a win, ask for feedback, or drop a question."
+            rows={4}
+            className="composer-textarea"
+          />
+        </label>
+
+        {state.attachment && (
+          <div className="composer-attachment" role="region" aria-label="Attachment preview">
+            {state.attachment.type === 'image' && (
+              <img src={state.attachment.preview} alt="Attachment preview" />
+            )}
+            <p>{state.attachment.name}</p>
+            <button type="button" onClick={removeAttachment} className="btn-tertiary">
+              Remove attachment
             </button>
           </div>
         )}
 
         {state.pollEnabled && (
           <div className="composer-poll">
-            <label className="composer-field">
+            <label className="form-field">
               <span>Poll question</span>
               <input
                 type="text"
@@ -187,7 +236,7 @@ const PostComposer = ({ channels, defaultChannelId, onPostCreated }) => {
             </label>
             <div className="composer-poll-options">
               {state.pollOptions.map((option, index) => (
-                <label key={`poll-${index}`} className="composer-field">
+                <label key={`poll-${index}`} className="form-field">
                   <span>Option {index + 1}</span>
                   <input
                     type="text"
@@ -203,18 +252,18 @@ const PostComposer = ({ channels, defaultChannelId, onPostCreated }) => {
 
         <div className="composer-actions">
           <label className="composer-attach">
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
-            <span>Attach image</span>
+            <input type="file" onChange={handleFileUpload} aria-label="Attach file" />
+            <span>Attach file</span>
           </label>
           <button
             type="button"
-            className={`composer-toggle ${state.pollEnabled ? 'composer-toggle--active' : ''}`}
+            className={`chip${state.pollEnabled ? ' chip--accent' : ''}`}
             onClick={() => handleChange('pollEnabled', !state.pollEnabled)}
             aria-pressed={state.pollEnabled}
           >
             {state.pollEnabled ? 'Remove poll' : 'Add poll'}
           </button>
-          <button type="submit" className="button-pill" disabled={!canSubmit() || submitting}>
+          <button type="submit" className="btn-primary" disabled={!canSubmit() || submitting}>
             {submitting ? 'Posting…' : 'Share update'}
           </button>
         </div>

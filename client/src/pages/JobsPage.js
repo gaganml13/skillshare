@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import HeaderHero from '../components/HeaderHero';
+import InsightsCard from '../components/InsightsCard';
 import { AuthContext } from '../context/AuthContext';
 import {
+  getInsights,
+  getInsightsSeed,
+  saveInsights,
   getJobs,
   getSavedJobs,
   persistSavedJobsList,
@@ -39,6 +43,7 @@ const JobsPage = () => {
   const [quickApplyJob, setQuickApplyJob] = useState(null);
   const [prefillProfile, setPrefillProfile] = useState({});
   const [userSkills, setUserSkills] = useState([]);
+  const [insights, setInsights] = useState(() => getInsights());
 
   useEffect(() => {
     setJobs(getJobs());
@@ -167,6 +172,32 @@ const JobsPage = () => {
             { label: 'Quick applies', value: `${applications.length}` }
           ]}
         />
+
+        <section className="jobs-insights" aria-label="Market insights">
+          <div className="jobs-insights__header">
+            <div>
+              <p className="eyebrow">Signal board</p>
+              <h2>Insights from hiring partners</h2>
+              <p className="muted">Fresh reads on what partners are seeking this week.</p>
+            </div>
+            <button
+              type="button"
+              className="ghost-btn"
+              onClick={() => {
+                const seed = getInsightsSeed();
+                setInsights(seed);
+                saveInsights(seed);
+              }}
+            >
+              Refresh insights
+            </button>
+          </div>
+          <div className="jobs-insights__grid">
+            {insights.map((insight) => (
+              <InsightsCard key={insight.id} {...insight} />
+            ))}
+          </div>
+        </section>
 
         {userSkills.length === 0 && (
           <div className="jobs-callout">
