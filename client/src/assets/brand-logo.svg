@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="SkillverseX logo">
+  <defs>
+    <linearGradient id="hexGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2f46ff" />
+      <stop offset="100%" stop-color="#44c7ff" />
+    </linearGradient>
+  </defs>
+  <polygon points="60 6 102 26 102 74 60 114 18 94 18 26" fill="url(#hexGradient)" />
+  <text x="50%" y="65%" text-anchor="middle" font-family="Poppins, Helvetica, Arial, sans-serif" font-size="52" font-weight="700" fill="#fff">S</text>
+</svg>

@@ -298,6 +298,15 @@ textarea:focus-visible {
   text-decoration: none;
 }
 
+.site-nav__logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #fff;
+  padding: 6px;
+  box-shadow: var(--shadow-sm);
+}
+
 .site-nav__logo-badge {
   width: 36px;
   height: 36px;

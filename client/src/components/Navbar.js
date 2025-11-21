@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import AccountMenu from './AccountMenu';
 import ThemeToggle from './ThemeToggle';
+import BrandLogo from '../assets/brand-logo.svg';
 
 // Navbar surfaces the primary routes, profile menu, and theme toggle using CSS variables.
 const navItems = [
@@ -30,7 +31,7 @@ const Navbar = () => {
     <nav className="site-nav" aria-label="Primary navigation">
       <div className="site-nav__brand">
         <Link to="/home" className="site-nav__logo">
-          <span className="site-nav__logo-badge" aria-hidden="true">🎓</span>
+          <img src={BrandLogo} alt="SkillverseX logo" className="site-nav__logo-img" />
           SkillverseX
         </Link>
       </div>
