@@ -6,5 +6,8 @@
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
     "react-player": "^3.3.3"
+  },
+  "scripts": {
+    "vercel-build": "npm --prefix client install && npm --prefix client run build"
   }
 }
