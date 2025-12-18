@@ -27,7 +27,8 @@ const AccountMenu = ({ isOpen, anchorRef, onClose, user }) => {
 
   const menuItems = useMemo(
     () => [
-      { id: 'profile', label: 'Profile', to: '/account#profile' },
+      { id: 'profile', label: 'My Profile', to: '/my-profile' },
+      { id: 'account', label: 'Account Settings', to: '/account' },
       { id: 'password', label: 'Change Password', to: '/account#password' },
       { id: 'downloads', label: 'Downloads', to: '/downloads' },
       { id: 'email', label: 'Email Preferences', to: '/account#email-preferences' },

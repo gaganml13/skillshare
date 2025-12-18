@@ -1,6 +1,7 @@
 // AddLessonForm.js - Form for instructors to add a lesson to a course
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../config';
 import VideoUpload from './VideoUpload';
 
 const AddLessonForm = ({ courseId, onLessonAdded }) => {
@@ -28,7 +29,7 @@ const AddLessonForm = ({ courseId, onLessonAdded }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`/api/courses/${courseId}/lessons`, {
+      await axios.put(`${API_URL}/api/courses/${courseId}/lessons`, {
         title,
         videoUrl,
         visibility,

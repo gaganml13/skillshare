@@ -1,4 +1,5 @@
 import rawSeeds from '../data/seeds.json';
+import { API_URL } from '../config';
 import mentorSeeds from '../data/mentors.json';
 import communitySeeds from '../data/community.json';
 import jobSeeds from '../data/jobs.json';
@@ -595,7 +596,7 @@ export const logoutUser = async () => {
   const timestamp = new Date().toISOString();
   try {
     if (typeof fetch === 'function') {
-      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+      await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
     }
     // Server response should clear httpOnly cookies if they exist.
   } catch (error) {

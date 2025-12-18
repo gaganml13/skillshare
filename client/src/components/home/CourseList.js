@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import CourseCard from '../CourseCard';
+import { API_URL } from '../../config';
 import { SAMPLE_COURSES, isSampleEnrolled } from '../../utils/sampleCourses';
 
 /**
@@ -19,7 +20,7 @@ const CourseList = () => {
     // Fetch courses from backend API
     const fetchCourses = async () => {
       try {
-        const res = await axios.get('/api/courses');
+        const res = await axios.get(`${API_URL}/api/courses`);
         const fetched = Array.isArray(res.data) ? res.data : [];
         if (fetched.length === 0) {
           setCourses(SAMPLE_COURSES);

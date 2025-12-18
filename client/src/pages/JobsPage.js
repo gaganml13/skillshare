@@ -15,6 +15,7 @@ import {
 import JobFilters from '../components/jobs/JobFilters';
 import JobCard from '../components/jobs/JobCard';
 import QuickApplyModal from '../components/jobs/QuickApplyModal';
+import JobReadinessSidebar from '../components/jobs/JobReadinessSidebar';
 
 const USER_PROFILE_KEY = 'skillversex:userProfile';
 const USER_SKILLS_KEY = 'skillversex:userSkills';
@@ -226,39 +227,43 @@ const JobsPage = () => {
           onReset={handleResetFilters}
         />
 
-        <section id="job-feed" className="job-feed">
-          <div className="job-feed__header">
-            <div>
-              <p className="eyebrow">This week</p>
-              <h2>{filteredJobs.length} curated roles</h2>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2rem', marginTop: '2rem' }}>
+          <section id="job-feed" className="job-feed" style={{ flex: 1 }}>
+            <div className="job-feed__header">
+              <div>
+                <p className="eyebrow">This week</p>
+                <h2>{filteredJobs.length} curated roles</h2>
+              </div>
+              <p className="muted">Sorted by match score, then freshness.</p>
             </div>
-            <p className="muted">Sorted by match score, then freshness.</p>
-          </div>
 
-          <div className="job-grid">
-            {filteredJobs.map(({ job, matchScore, applicationStatus }) => (
-              <JobCard
-                key={job.id}
-                job={job}
-                matchScore={matchScore}
-                applicationStatus={applicationStatus}
-                isSaved={savedJobs.includes(job.id)}
-                onToggleSave={handleToggleSave}
-                onQuickApply={setQuickApplyJob}
-              />
-            ))}
-          </div>
-
-          {filteredJobs.length === 0 && (
-            <div className="job-empty-state">
-              <h3>No roles match that filter yet</h3>
-              <p>Try widening your location or salary band — new briefs land daily.</p>
-              <button type="button" className="ghost-btn" onClick={handleResetFilters}>
-                Clear filters
-              </button>
+            <div className="job-grid">
+              {filteredJobs.map(({ job, matchScore, applicationStatus }) => (
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  matchScore={matchScore}
+                  applicationStatus={applicationStatus}
+                  isSaved={savedJobs.includes(job.id)}
+                  onToggleSave={handleToggleSave}
+                  onQuickApply={setQuickApplyJob}
+                />
+              ))}
             </div>
-          )}
-        </section>
+
+            {filteredJobs.length === 0 && (
+              <div className="job-empty-state">
+                <h3>No roles match that filter yet</h3>
+                <p>Try widening your location or salary band — new briefs land daily.</p>
+                <button type="button" className="ghost-btn" onClick={handleResetFilters}>
+                  Clear filters
+                </button>
+              </div>
+            )}
+          </section>
+
+          <JobReadinessSidebar user={user} />
+        </div>
       </div>
 
       {quickApplyJob && (

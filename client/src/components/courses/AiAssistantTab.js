@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 const AiAssistantTab = ({ showHeader = true }) => {
   const [messages, setMessages] = useState([]); // { sender: 'user'|'ai', text: string }
@@ -19,7 +20,7 @@ const AiAssistantTab = ({ showHeader = true }) => {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        '/api/ai/chat',
+        `${API_URL}/api/ai/chat`,
         { prompt: input },
         token ? { headers: { Authorization: 'Bearer ' + token } } : {}
       );

@@ -2,6 +2,7 @@ import React, { useState, useContext, useCallback, useEffect, useMemo } from 're
 import { Link, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import { API_URL } from '../config';
 import { AuthContext } from '../context/AuthContext';
 import HeaderHero from '../components/HeaderHero';
 import KPIGrid from '../components/KPIGrid';
@@ -302,7 +303,7 @@ const DashboardPage = () => {
     const fetchUserCourses = async () => {
       setIsFetching(true);
       try {
-        const res = await axios.get('/api/courses/user/dashboard', {
+        const res = await axios.get(`${API_URL}/api/courses/user/dashboard`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setRemoteCreatedCourses(res.data.createdCourses || []);
@@ -320,7 +321,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const res = await axios.get('/api/courses');
+        const res = await axios.get(`${API_URL}/api/courses`);
         const fetched = Array.isArray(res.data) ? res.data : [];
         setFeaturedCourses(fetched.length > 0 ? fetched : SAMPLE_COURSES);
       } catch (err) {

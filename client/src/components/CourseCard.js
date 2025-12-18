@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { API_URL } from '../config';
 import { storeSampleEnrollment, isSampleCourseId, isSampleEnrolled } from '../utils/sampleCourses';
 import ProgressBar from './ui/ProgressBar';
 import { useCourseProgress } from '../hooks/useCourseProgress';
@@ -84,12 +85,12 @@ const CourseCard = ({
     setEnrolling(true);
     try {
       if (courseAccess === 'private') {
-        await axios.post(`/api/courses/${courseId}/request-access`, {}, {
+        await axios.post(`${API_URL}/api/courses/${courseId}/request-access`, {}, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setRequested(true);
       } else {
-        await axios.post(`/api/courses/${courseId}/enroll`, {}, {
+        await axios.post(`${API_URL}/api/courses/${courseId}/enroll`, {}, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setIsEnrolled(true);

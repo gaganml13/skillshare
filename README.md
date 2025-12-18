@@ -92,6 +92,19 @@ npm start
 ```
 
 The backend API is unchanged by this PR, so the existing `.env` expectations remain the same.
+> Note: add your Google Gemini key to `server/.env` as `GEMINI_API_KEY` and never push that secret to git.
+<!-- Documented GEMINI key reminder for deployments. -->
+
+### ✅ Local chat testing
+
+1. `npm --prefix server install`
+2. `npm --prefix client install`
+3. Start the services:
+    * `npm --prefix server run start`
+    * `npm --prefix client run start`
+4. Open `http://localhost:3000` in the browser.
+5. Launch the SkillverseX AI chat, send a message, and watch the server console for `[chat] incoming request` logs.
+<!-- Added consolidated local chat test steps. -->
 
 > Tip: When experimenting with the new `useCourseProgress` hook or `AIChatWidget`, run `npm start` in both `client/` and `server/` to keep sample data and API responses in sync.
 

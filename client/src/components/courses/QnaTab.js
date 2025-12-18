@@ -1,6 +1,7 @@
 // QnaTab.js - Q&A tab for course detail page
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 const QnaTab = ({ courseId, discussions = [], refreshDiscussions }) => {
   const [question, setQuestion] = useState('');
@@ -18,7 +19,7 @@ const QnaTab = ({ courseId, discussions = [], refreshDiscussions }) => {
       return;
     }
     try {
-      await axios.post(`/api/discussions/ask`, {
+      await axios.post(`${API_URL}/api/discussions/ask`, {
         courseId,
         question,
       }, {

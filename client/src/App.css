@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+/* Global UI Tweaks */
+:root {
+  --input-radius: 16px; /* Slightly bigger border-radius */
+}
+
+.btn, .primary-btn {
+  box-shadow: 0 4px 14px rgba(108, 72, 255, 0.25); /* Subtle shadow for CTA buttons */
+}

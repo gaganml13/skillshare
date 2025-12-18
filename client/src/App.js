@@ -14,10 +14,12 @@ import LeaderboardPage from './pages/LeaderboardPage';
 import HomePage from './pages/HomePage';
 import EventsPage from './pages/EventsPage';
 import AccountPage from './pages/AccountPage';
+import MyProfilePage from './pages/MyProfilePage';
 import DownloadsPage from './pages/DownloadsPage';
 import ProtectedRoute from './components/routing/ProtectedRoute';
 import CourseDetailPage from './pages/CourseDetailPage';
 import { Navigate } from 'react-router-dom';
+import ChatWidget from './components/ChatWidget';
 
 // The app shell stays theme-aware by relying on global CSS variables instead of inline styles.
 
@@ -26,6 +28,7 @@ function App() {
     <div className="app-shell">
       <AuthProvider>
         <Router>
+          <ChatWidget />
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -82,6 +85,11 @@ function App() {
               </ProtectedRoute>
             } />
             <Route path="/live-events" element={<Navigate to="/events" replace />} />
+            <Route path="/my-profile" element={
+              <ProtectedRoute>
+                <MyProfilePage />
+              </ProtectedRoute>
+            } />
             <Route path="/account" element={
               <ProtectedRoute>
                 <AccountPage />

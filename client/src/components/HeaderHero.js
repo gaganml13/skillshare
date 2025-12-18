@@ -135,8 +135,11 @@ const HeaderHero = ({
                   if (action.target) props.target = action.target;
                   if (action.rel) props.rel = action.rel;
                 }
+                // Remove key from props object to avoid spreading it
+                const { key, ...restProps } = props;
+
                 return (
-                  <ButtonPill {...props}>
+                  <ButtonPill key={key} {...restProps}>
                     {action.icon && <span aria-hidden="true">{action.icon}</span>}
                     {action.label}
                   </ButtonPill>

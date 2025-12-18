@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../config';
 
 const PLACEHOLDER_POSTER = 'https://dummyimage.com/640x360/111827/ffffff&text=Video+Preview';
 
@@ -20,7 +21,7 @@ const VideoUpload = ({ value, onChange, label = 'Upload lesson video' }) => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('type', 'lesson-video');
-    const response = await axios.post('/api/upload', formData, {
+    const response = await axios.post(`${API_URL}/api/upload`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: (event) => {
         if (!event.total) return;

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import VerificationBadge from '../common/VerificationBadge';
 
 // JobCard leans on the shared card + button styles so it stays consistent across themes.
 
@@ -50,9 +51,16 @@ const JobCard = ({
         <div className="job-card__salary">{job.salaryRange}</div>
 
         <div className="job-card__skills">
-          {job.skills.map((skill) => (
-            <span key={skill} className="skill-pill">{skill}</span>
-          ))}
+          {job.skills.map((skill) => {
+            // Dummy verification logic: Mark specific skills as verified
+            const isVerified = ['React', 'Node.js', 'Figma', 'Python'].some(s => skill.includes(s));
+            return (
+              <span key={skill} className={`skill-pill ${isVerified ? 'skill-pill--verified' : ''}`} style={isVerified ? { border: '1px solid var(--primary-light)', background: 'var(--bg-surface-2)' } : {}}>
+                {skill}
+                {isVerified && <VerificationBadge size={14} text="" className="ml-1" />}
+              </span>
+            );
+          })}
         </div>
 
         {job.tags?.length > 0 && (
