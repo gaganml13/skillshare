@@ -9,11 +9,10 @@ const isVite = typeof import.meta !== 'undefined' && import.meta.env;
 
 // Get the API URL from environment variables
 const getApiUrl = () => {
-    // FORCE LOCALHOST IN DEVELOPMENT
-    // This ensures we don't accidentally hit production when running locally
-    if (process.env.NODE_ENV === 'development') {
-        return 'http://localhost:5000';
-    }
+    // Removed forced localhost to allow production API usage
+    // if (process.env.NODE_ENV === 'development') {
+    //     return 'http://localhost:5000';
+    // }
 
     if (isVite) {
         return import.meta.env.VITE_API_URL;
