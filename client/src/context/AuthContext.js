@@ -45,6 +45,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginDemo = async () => {
+    const dummyUser = {
+      _id: 'demo-user-123',
+      name: 'Demo User',
+      email: 'demo@skillversex.com',
+      role: 'student'
+    };
+    const dummyToken = 'demo-token-12345';
+
+    setUser(dummyUser);
+    setToken(dummyToken);
+    localStorage.setItem('user', JSON.stringify(dummyUser));
+    localStorage.setItem('token', dummyToken);
+    return { success: true };
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -53,7 +69,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout, loginDemo }}>
       {children}
     </AuthContext.Provider>
   );

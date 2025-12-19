@@ -9,7 +9,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login, register } = useContext(AuthContext);
+  const { login, register, loginDemo } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -58,6 +58,18 @@ const LoginPage = () => {
         </div>
         {error && <div style={{ color: isRegister && error.startsWith('Registration successful') ? 'green' : 'red', marginBottom: 12 }}>{error}</div>}
         <button type="submit" style={{ width: '100%', padding: 10, background: '#6C63FF', color: '#fff', border: 'none', borderRadius: 4 }}>{isRegister ? 'Register' : 'Login'}</button>
+        {!isRegister && (
+          <button
+            type="button"
+            onClick={async () => {
+              const res = await loginDemo();
+              if (res.success) navigate('/dashboard');
+            }}
+            style={{ width: '100%', marginTop: 12, padding: 10, background: '#e0e7ff', color: '#4338ca', border: 'none', borderRadius: 4, fontWeight: '600' }}
+          >
+            Guest Demo Login
+          </button>
+        )}
       </form>
       <div style={{ marginTop: 16, textAlign: 'center' }}>
         <label style={{ cursor: 'pointer' }}>
